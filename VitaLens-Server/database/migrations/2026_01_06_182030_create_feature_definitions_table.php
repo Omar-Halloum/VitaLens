@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('feature_definitions', function (Blueprint $table) {
             $table->id();
-            $table->string('feature_name');
+            $table->string('feature_name')->unique();
             $table->string('display_name');
-            $table->timestamp('created_at');
             $table->timestamps();
         });
     }
