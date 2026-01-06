@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('document_texts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('document_id')->constrained('medical_documents')->onDelete('cascade');
+            $table->text('extracted_text');
             $table->timestamps();
         });
     }
