@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('risk_requirements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('risk_type_id')->constrained('risk_types')->onDelete('cascade');
+            $table->foreignId('feature_definition_id')->constrained('feature_definitions')->onDelete('cascade');
+            $table->boolean('is_required')->default(true);
             $table->timestamps();
         });
     }

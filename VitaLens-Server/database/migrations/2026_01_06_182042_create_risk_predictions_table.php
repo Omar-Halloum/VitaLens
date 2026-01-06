@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('risk_predictions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('risk_type_id')->constrained('risk_types')->onDelete('restrict');
+            $table->decimal('probability', 5, 4);
+            $table->string('confidence_level');
             $table->timestamps();
         });
     }
