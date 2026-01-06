@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('medical_documents', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('file_path');
+            $table->string('file_type')->nullable();
+            $table->timestamp('document_date')->nullable();
             $table->timestamps();
         });
     }

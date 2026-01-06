@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('dataset_variables', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('dataset_id')->constrained('datasets')->onDelete('cascade');
+            $table->foreignId('health_variable_id')->constrained('health_variables')->onDelete('cascade');
+            $table->string('column_name');
             $table->timestamps();
         });
     }
