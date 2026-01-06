@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('health_variables', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('unit_id')->nullable()->constrained('units')->onDelete('set null');
+            $table->string('key')->unique();
+            $table->string('display_name');
+            $table->boolean('is_ml_feature')->default(true);
             $table->timestamps();
         });
     }
