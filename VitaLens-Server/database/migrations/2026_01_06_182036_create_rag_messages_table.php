@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('rag_messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('conversation_id')->constrained('rag_conversations')->onDelete('cascade');
+            $table->string('role');
+            $table->text('content');
             $table->timestamps();
         });
     }
