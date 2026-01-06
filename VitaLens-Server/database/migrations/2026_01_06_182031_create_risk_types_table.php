@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('risk_types', function (Blueprint $table) {
             $table->id();
+            $table->string('key')->unique();
+            $table->string('display_name');
             $table->timestamps();
         });
     }
