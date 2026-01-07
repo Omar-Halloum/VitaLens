@@ -14,10 +14,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_type_id' => ['required', 'integer', 'exists:user_types,id'],
             'name' =>         ['required', 'string', 'max:255'],
             'email'        => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password'     => ['required', 'string', 'confirmed', 'min:8'],
+            'password'     => ['required', 'string', 'min:8'],
             'gender'       => ['required', 'string', 'in:male,female'],
             'birth_date'   => ['required', 'date', 'before:today'],
         ];
@@ -28,10 +27,8 @@ class RegisterRequest extends FormRequest
         return [
             'email.required'      => 'An email address is mandatory for your health profile.',
             'email.unique'        => 'This email already exist',
-            'password.confirmed'  => 'The password confirmation does not match.',
             'gender.in'           => 'Please select a valid gender (male or female) for accurate risk analysis.',
             'birth_date.before'   => 'Your birth date must be a date in the past.',
-            'user_type_id.exists' => 'The selected account type is invalid.',
         ];
     }
 }

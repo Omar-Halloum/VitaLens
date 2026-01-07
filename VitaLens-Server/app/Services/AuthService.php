@@ -12,7 +12,6 @@ class AuthService
     {
 
         $user = new User;
-        $user->user_type_id = $data['user_type_id'];
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = $data['password'];
