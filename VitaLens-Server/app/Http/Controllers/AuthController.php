@@ -1,70 +1,69 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthRequest; // Uses your custom request validation
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
-class AuthController extends Controller{
+class AuthController extends Controller
+{
+    protected $authService;
 
-    public function displayError(){
-        return $this->responseJSON("Unauthorized", "Unauthorized", 401);
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    public function register(AuthRequest $request){
+
+        $result = $this->authService->register($request->validated());
+
+        $user = $result['user'];
+        $user->token = $result['token'];
+
+        // 3. Response handled by Trait using $this->
+        return $this->responseJSON($user, "User created successfully", 201);
     }
 
     public function login(Request $request){
 
-        $request->validate([
-            'email' => 'required|string|email',
+        $credentials = $request->validate([
+            'email'    => 'required|string|email',
             'password' => 'required|string',
         ]);
-        $credentials = $request->only('email', 'password');
 
-        $token = Auth::attempt($credentials);
-        if (!$token) {
+        $result = $this->authService->login($credentials);
+
+        if (!$result) {
             return $this->responseJSON(null, "Unauthorized", 401);
         }
 
-        $user = Auth::user();
-        $user->token = $token;
-        return $this->responseJSON($user);
-    }
+        $user = $result['user'];
+        $user->token = $result['token'];
 
-    public function register(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-
-        $user = new User;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        $token = Auth::login($user);
-        $user->token = $token;
-        return $this->responseJSON($user);
+        return $this->responseJSON($user, "Login successful");
     }
 
     public function logout(){
-        Auth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
+
+        $this->authService->logout();
+        return $this->responseJSON(null, "Successfully logged out");
     }
 
     public function refresh(){
-        return response()->json([
-            'status' => 'success',
-            'user' => Auth::user(),
+        
+        $result = $this->authService->refresh();
+        
+        $payload = [
+            'user' => $result['user'],
             'authorisation' => [
-                'token' => Auth::refresh(),
-                'type' => 'bearer',
+                'token' => $result['token'],
+                'type'  => 'bearer',
             ]
-        ]);
-    }
+        ];
 
+        return $this->responseJSON($payload, "Token refreshed");
+    }
 }
