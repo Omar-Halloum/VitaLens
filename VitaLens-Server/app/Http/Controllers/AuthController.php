@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AuthRequest; // Uses your custom request validation
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 
@@ -16,28 +17,23 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register(AuthRequest $request){
+    public function register(RegisterRequest $request){
 
         $result = $this->authService->register($request->validated());
 
         $user = $result['user'];
         $user->token = $result['token'];
 
-        // 3. Response handled by Trait using $this->
         return $this->responseJSON($user, "User created successfully", 201);
     }
 
-    public function login(Request $request){
-
-        $credentials = $request->validate([
-            'email'    => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-
+    public function login(LoginRequest $request){
+        $credentials = $request->validated();
+        
         $result = $this->authService->login($credentials);
 
         if (!$result) {
-            return $this->responseJSON(null, "Unauthorized", 401);
+            return $this->responseJSON(null, "Invalid credentials", 401);
         }
 
         $user = $result['user'];
@@ -53,7 +49,7 @@ class AuthController extends Controller
     }
 
     public function refresh(){
-        
+
         $result = $this->authService->refresh();
         
         $payload = [
