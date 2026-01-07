@@ -12,7 +12,7 @@ class RiskTypeSeeder extends Seeder
     {
         $riskTypes = [
             [
-                'key' => 'diabetes',
+                'key' => 'type_2_diabetes',
                 'display_name' => 'Type 2 Diabetes'
             ],
             [
