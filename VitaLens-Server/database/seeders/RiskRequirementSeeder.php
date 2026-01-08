@@ -15,97 +15,196 @@ class RiskRequirementSeeder extends Seeder
         $getFeature = fn($name) => FeatureDefinition::where('feature_name', $name)->value('id');
 
         $requirements = [
-            // Type 2 Diabetes
+            // Type 2 Diabetes (DIQ010)
             [
-                'risk_type_id' => $getRiskType('type_2_diabetes'), 
-                'feature_definition_id' => $getFeature('systolic_bp'), 
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('fasting_glucose'),
                 'is_required' => true
             ],
             [
-                'risk_type_id' => $getRiskType('type_2_diabetes'), 
-                'feature_definition_id' => $getFeature('activity_moderate'), 
-                'is_required' => false 
-            ],
-            [
-                'risk_type_id' => $getRiskType('type_2_diabetes'), 
-                'feature_definition_id' => $getFeature('fasting_glucose'), 
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('hba1c'),
                 'is_required' => true
             ],
             [
-                'risk_type_id' => $getRiskType('type_2_diabetes'), 
-                'feature_definition_id' => $getFeature('bmi'), 
-                'is_required' => true
-            ],
-
-            // Heart Disease
-            [
-                'risk_type_id' => $getRiskType('heart_disease'), 
-                'feature_definition_id' => $getFeature('systolic_bp'), 
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('bmi'),
                 'is_required' => true
             ],
             [
-                'risk_type_id' => $getRiskType('heart_disease'), 
-                'feature_definition_id' => $getFeature('diastolic_bp'), 
-                'is_required' => true
-            ],
-            [
-                'risk_type_id' => $getRiskType('heart_disease'), 
-                'feature_definition_id' => $getFeature('ldl_cholesterol'), 
-                'is_required' => true
-            ],
-            [
-                'risk_type_id' => $getRiskType('heart_disease'), 
-                'feature_definition_id' => $getFeature('smoking_status'), 
-                'is_required' => true
-            ],
-
-            // Hypertension
-            [
-                'risk_type_id' => $getRiskType('hypertension'), 
-                'feature_definition_id' => $getFeature('systolic_bp'), 
-                'is_required' => true
-            ],
-            [
-                'risk_type_id' => $getRiskType('hypertension'), 
-                'feature_definition_id' => $getFeature('diastolic_bp'), 
-                'is_required' => true
-            ],
-            [
-                'risk_type_id' => $getRiskType('hypertension'), 
-                'feature_definition_id' => $getFeature('age'), 
-                'is_required' => true
-            ],
-            [
-                'risk_type_id' => $getRiskType('hypertension'), 
-                'feature_definition_id' => $getFeature('bmi'), 
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('waist_circumference'),
                 'is_required' => false
             ],
             [
-                'risk_type_id' => $getRiskType('hypertension'), 
-                'feature_definition_id' => $getFeature('activity_moderate'), 
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('age'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('gender'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('systolic_bp'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('hdl_cholesterol'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('triglycerides'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('activity_moderate'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('sleep_duration'),
                 'is_required' => false
             ],
 
-            // Chronic Kidney Disease
+            // Heart Disease (MCQ160C)
             [
-                'risk_type_id' => $getRiskType('chronic_kidney_disease'), 
-                'feature_definition_id' => $getFeature('systolic_bp'), 
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('systolic_bp'),
                 'is_required' => true
             ],
             [
-                'risk_type_id' => $getRiskType('chronic_kidney_disease'), 
-                'feature_definition_id' => $getFeature('creatinine'), 
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('diastolic_bp'),
                 'is_required' => true
             ],
-             [
-                'risk_type_id' => $getRiskType('chronic_kidney_disease'), 
-                'feature_definition_id' => $getFeature('bun'), 
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('ldl_cholesterol'),
                 'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('smoking_status'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('age'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('gender'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('bmi'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('hdl_cholesterol'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('triglycerides'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('heart_disease'),
+                'feature_definition_id' => $getFeature('alcohol_intake'),
+                'is_required' => false
+            ],
+
+            // Hypertension (BPQ020)
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('systolic_bp'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('diastolic_bp'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('age'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('bmi'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('waist_circumference'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('uric_acid'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('alcohol_intake'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('activity_moderate'),
+                'is_required' => false
+            ],
+
+            // Kidney Disease (KIQ022)
+            [
+                'risk_type_id' => $getRiskType('kidney_disease'),
+                'feature_definition_id' => $getFeature('creatinine'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('kidney_disease'),
+                'feature_definition_id' => $getFeature('bun'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('kidney_disease'),
+                'feature_definition_id' => $getFeature('uric_acid'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('kidney_disease'),
+                'feature_definition_id' => $getFeature('age'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('kidney_disease'),
+                'feature_definition_id' => $getFeature('systolic_bp'),
+                'is_required' => true
+            ],
+            [
+                'risk_type_id' => $getRiskType('kidney_disease'),
+                'feature_definition_id' => $getFeature('bmi'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('kidney_disease'),
+                'feature_definition_id' => $getFeature('sleep_duration'),
+                'is_required' => false
             ],
         ];
 
         foreach ($requirements as $requirement) {
-            // Only insert if both IDs were found
             if ($requirement['risk_type_id'] && $requirement['feature_definition_id']) {
                 RiskRequirement::firstOrCreate(
                     [
