@@ -13,11 +13,6 @@ class DatasetVariableSeeder extends Seeder
     public function run(): void
     {
         $dataset = Dataset::where('name', 'NHANES 2013-2014/2017-2018 (Combined)')->first();
-        
-        if (!$dataset) {
-            $this->command->warn('Dataset not found. Please run DatasetSeeder first.');
-            return;
-        }
 
         $getVariable = fn($key) => HealthVariable::where('key', $key)->value('id');
 
@@ -37,6 +32,10 @@ class DatasetVariableSeeder extends Seeder
             // Body Measures
             'BMXBMI' => 'bmi',
             'BMXWAIST' => 'waist_circumference',
+
+            // Vitals
+            'avg_systolic' => 'systolic_bp', 
+            'avg_diastolic' => 'diastolic_bp',
             
             // Lab Results
             'LBXGLU' => 'fasting_glucose',
@@ -51,22 +50,18 @@ class DatasetVariableSeeder extends Seeder
 
         foreach ($mappings as $columnName => $variableKey) {
             $variableId = $getVariable($variableKey);
-            
-            if (!$variableId) {
-                $this->command->warn("Health variable '{$variableKey}' not found for column '{$columnName}'. Skipping.");
-                continue;
-            }
 
-            DatasetVariable::firstOrCreate(
-                [
-                    'dataset_id' => $dataset->id,
-                    'column_name' => $columnName
-                ],
-                [
-                    'health_variable_id' => $variableId
-                ]
-            );
+            if ($variableId) {
+                DatasetVariable::firstOrCreate(
+                    [
+                        'dataset_id' => $dataset->id,
+                        'column_name' => $columnName
+                    ],
+                    [
+                        'health_variable_id' => $variableId
+                    ]
+                );
+            }
         }
     }
 }
-
