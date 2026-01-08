@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class MedicalDocument extends Model
 {
-    protected $fillable = ['user_id', 'file_path', 'file_type', 'document_date'];
+    protected $fillable = [
+        'user_id',
+        'file_path',
+        'file_type',
+        'document_date'
+    ];
 
     protected function casts(): array
     {
