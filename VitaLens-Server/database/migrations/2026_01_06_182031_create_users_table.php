@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_type_id')->default(2)->constrained('user_types')->onDelete('restrict');
-            $table->string('name');
+            $table->foreignId('clinic_id')->nullable()->constrained('clinics')->onDelete('cascade');            $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('gender');
             $table->date('birth_date');
+            $table->string('drive_folder_link')->nullable();
             $table->timestamps();
         });
     }
