@@ -14,12 +14,14 @@ class User extends Authenticatable implements JWTSubject
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name',
         'user_type_id',
+        'clinic_id',
+        'name',
         'email',
         'password',
         'gender',
         'birth_date',
+        'drive_folder_link',
     ];
 
     protected $hidden = [
@@ -77,6 +79,16 @@ class User extends Authenticatable implements JWTSubject
     public function riskPredictions()
     {
         return $this->hasMany(RiskPrediction::class);
+    }
+
+    public function clinic()
+    {
+        return $this->belongsTo(Clinic::class);
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(GeneratedReport::class);
     }
 
     public function getJWTIdentifier()
