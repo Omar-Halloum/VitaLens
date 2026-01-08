@@ -4,10 +4,18 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Services\BodyMetricService;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
+    protected $bodyMetricService;
+
+    public function __construct(BodyMetricService $bodyMetricService)
+    {
+        $this->bodyMetricService = $bodyMetricService;
+    }
+
     public function register(array $data): array
     {
 
@@ -19,6 +27,15 @@ class AuthService
         $user->birth_date = $data['birth_date'];
         
         $user->save();
+
+        $userFields = ['name', 'email', 'password', 'gender', 'birth_date'];
+
+        // emove user fields, leaving only potential metrics
+        $metricsToLog = array_diff_key($data, array_flip($userFields));
+
+        if (!empty($metricsToLog)) {
+            $this->bodyMetricService->addMetrics($user, $metricsToLog);
+        }
 
         $token = Auth::login($user);
 
