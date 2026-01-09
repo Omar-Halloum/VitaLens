@@ -51,5 +51,17 @@ class MedicalMetricController extends Controller
             return $this->responseJSON($e->getMessage(), "failure", 500);
         }
     }
+
+    public function getDocumentMetrics(Request $request, $documentId)
+    {
+        try {
+            $metrics = $this->medicalMetricService->getMetricsByDocument($documentId);
+            
+            return $this->responseJSON($metrics, "Document metrics retrieved successfully");
+            
+        } catch (\Exception $e) {
+            return $this->responseJSON($e->getMessage(), "failure", 500);
+        }
+    }
 }
 
