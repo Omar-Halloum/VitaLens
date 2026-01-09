@@ -38,5 +38,18 @@ class MedicalMetricController extends Controller
             return $this->responseJSON($e->getMessage(), "failure", 500);
         }
     }
+
+    public function getUserMetrics(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $metrics = $this->medicalMetricService->getMetricsByUser($user);
+            
+            return $this->responseJSON($metrics, "Metrics retrieved successfully");
+            
+        } catch (\Exception $e) {
+            return $this->responseJSON($e->getMessage(), "failure", 500);
+        }
+    }
 }
 
