@@ -30,7 +30,7 @@ class AuthService
 
         $userFields = ['name', 'email', 'password', 'gender', 'birth_date'];
 
-        // emove user fields, leaving only potential metrics
+        // remove user fields, leaving only potential metrics
         $metricsToLog = array_diff_key($data, array_flip($userFields));
 
         if (!empty($metricsToLog)) {
