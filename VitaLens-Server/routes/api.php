@@ -17,7 +17,8 @@ Route::get('/get-document-text/{documentId}', [DocumentTextController::class, 'g
 
 // authenticated routes
 Route::group(["prefix" => "v1", "middleware" => "auth:api"], function (){
-
+    Route::post("/logout", [AuthController::class, "logout"]);
+    
     Route::post('/upload-documents', [MedicalDocumentController::class, 'addDocument']);
     Route::get('/get-documents', [MedicalDocumentController::class, 'getUserDocuments']);
 });
