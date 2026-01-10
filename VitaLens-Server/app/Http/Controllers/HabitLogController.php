@@ -82,4 +82,3 @@ class HabitLogController extends Controller
         }
     }
 }
-
