@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ExtractMetricsRequest;
 use App\Services\HealthDataExtractionService;
 use App\Services\MedicalMetricService;
+use App\Services\EngineeredFeatureService;
+use App\Services\RiskPredictionService;
 use App\Models\MedicalDocument;
 use Illuminate\Http\Request;
 
@@ -12,13 +14,19 @@ class MedicalMetricController extends Controller
 {
     protected $healthDataExtractionService;
     protected $medicalMetricService;
+    protected $engineeredFeatureService;
+    protected $riskPredictionService;
 
     public function __construct(
         HealthDataExtractionService $healthDataExtractionService,
-        MedicalMetricService $medicalMetricService
+        MedicalMetricService $medicalMetricService,
+        EngineeredFeatureService $engineeredFeatureService,
+        RiskPredictionService $riskPredictionService
     ) {
         $this->healthDataExtractionService = $healthDataExtractionService;
         $this->medicalMetricService = $medicalMetricService;
+        $this->engineeredFeatureService = $engineeredFeatureService;
+        $this->riskPredictionService = $riskPredictionService;
     }
 
     public function extractMetrics(ExtractMetricsRequest $request)
@@ -32,7 +40,13 @@ class MedicalMetricController extends Controller
                 return $this->responseJSON(null, $result['message'], 400);
             }
 
-            return $this->responseJSON($result, $result['message']);
+            // auto trigger to recalculate features with new medical metrics
+            $this->engineeredFeatureService->prepareUserFeatures($document->user);
+            
+            // auto trigger to update risk predictions
+            $this->riskPredictionService->predictUserRisks($document->user);
+
+            return $this->responseJSON($result, "Metrics extracted and predictions updated successfully");
             
         } catch (\Exception $e) {
             return $this->responseJSON($e->getMessage(), "failure", 500);
