@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MedicalDocumentController;
 use App\Http\Controllers\DocumentTextController;
 use App\Http\Controllers\MedicalMetricController;
+use App\Http\Controllers\HabitLogController;
 
 
 // unauthenticated routes
@@ -27,4 +28,9 @@ Route::group(["prefix" => "v1", "middleware" => "auth:api"], function (){
 
     Route::get('/medical-metrics', [MedicalMetricController::class, 'getUserMetrics']);
     Route::get('/medical-metrics/document/{documentId}', [MedicalMetricController::class, 'getDocumentMetrics']);
+
+    Route::post('/log-habit', [HabitLogController::class, 'storeHabit']);
+    Route::get('/habit-logs', [HabitLogController::class, 'getUserLogs']);
+    Route::get('/habit-metrics', [HabitLogController::class, 'getUserHabitMetrics']);
+    Route::get('/habit-log-metrics/{logId}', [HabitLogController::class, 'getLogMetrics']);
 });
