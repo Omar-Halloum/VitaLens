@@ -21,23 +21,29 @@ class AIService
 
     public function aiCall(array $messages)
     {
-        /** @var \Illuminate\Http\Client\Response $response */
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->apiKey,
-            'Content-Type' => 'application/json',
-        ])
-        ->timeout($this->timeout)
-        ->post("{$this->baseUrl}/chat/completions", [
-            'model' => $this->model,
-            'messages' => $messages,
-            'temperature' => 0,
-            'response_format' => ['type' => 'json_object'],
-        ]);
+        try {
+            /** @var \Illuminate\Http\Client\Response $response */
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Content-Type' => 'application/json',
+            ])
+            ->timeout($this->timeout)
+            ->post("{$this->baseUrl}/chat/completions", [
+                'model' => $this->model,
+                'messages' => $messages,
+                'temperature' => 0,
+                'response_format' => ['type' => 'json_object'],
+            ]);
 
-        if ($response->failed()) {
-            return null;
+            if ($response->failed()) {
+                $error = $response->json();
+                throw new \Exception('AI API Error: ' . ($error['error']['message'] ?? $response->body()));
+            }
+
+            return $response->json('choices.0.message.content');
+
+        } catch (\Exception $e) {
+            throw new \Exception('AI Service Error: ' . $e->getMessage());
         }
-
-        return $response->json('choices.0.message.content');
     }
 }

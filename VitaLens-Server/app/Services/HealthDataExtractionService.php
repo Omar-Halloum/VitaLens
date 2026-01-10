@@ -42,12 +42,19 @@ class HealthDataExtractionService
             $healthVariables
         );
 
-        $aiResponse = $this->aiService->aiCall($messages);
+        try {
+            $aiResponse = $this->aiService->aiCall($messages);
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
 
         if (!$aiResponse) {
             return [
                 'success' => false,
-                'message' => 'AI service failed to respond',
+                'message' => 'AI service returned empty response',
             ];
         }
 
@@ -56,7 +63,7 @@ class HealthDataExtractionService
         if (!$parsedResponse || !isset($parsedResponse['metrics'])) {
             return [
                 'success' => false,
-                'message' => 'Invalid AI response format',
+                'message' => 'Invalid AI response format: ' . $aiResponse,
             ];
         }
 
