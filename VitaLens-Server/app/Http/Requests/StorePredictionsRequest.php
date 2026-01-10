@@ -34,4 +34,3 @@ class StorePredictionsRequest extends FormRequest
         ];
     }
 }
-
