@@ -29,4 +29,3 @@ class HabitLogService
         return HabitLog::find($logId);
     }
 }
-
