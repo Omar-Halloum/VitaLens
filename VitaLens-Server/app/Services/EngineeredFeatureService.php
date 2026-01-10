@@ -32,4 +32,35 @@ class EngineeredFeatureService
         return strtolower($user->gender) === 'male' ? 1 : 2;
     }
 
+    protected function calculateBMI(User $user): ?float
+    {
+        $height = $this->getLatestBodyMetric($user, 'height');
+        $weight = $this->getLatestBodyMetric($user, 'weight');
+        
+        if (!$height || !$weight || $height <= 0) {
+            return null;
+        }
+        
+        // BMI = weight (kg) / height (m)^2
+        $heightInMeters = $height / 100;
+        
+        return round($weight / ($heightInMeters * $heightInMeters), 2);
+    }
+
+    protected function getLatestBodyMetric(User $user, string $variableKey): ?float
+    {
+        $variable = HealthVariable::where('key', $variableKey)->first();
+        
+        if (!$variable) {
+            return null;
+        }
+        
+        $metric = BodyMetric::where('user_id', $user->id)
+            ->where('health_variable_id', $variable->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        return $metric ? (float) $metric->value : null;
+    }
+
 }
