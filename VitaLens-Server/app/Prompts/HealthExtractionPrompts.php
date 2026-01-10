@@ -23,6 +23,22 @@ class HealthExtractionPrompts
                 - Height: inches to cm → multiply by 2.54";
     }
 
+    protected static function getHabitSystemPrompt(): string
+    {
+        return "You are a health habit extraction assistant. Your job is to extract lifestyle and behavioral health metrics from user's daily habit logs.
+
+                RULES:
+                1. Only extract values that are clearly mentioned in the text
+                2. Convert all values to the units specified in the health variables list
+                3. Do not guess or estimate values
+                4. Return ONLY valid JSON, no explanations
+                5. Be flexible with language (e.g., 'jogged' = moderate activity, 'slept' = sleep duration)
+
+                Unit conversions if needed:
+                - Activity: hours to minutes → multiply by 60
+                - Sleep: minutes to hours → divide by 60";
+    }
+
     public static function documentExtractionPrompt(string $extractedText, array $healthVariables): array
     {
         $variablesList = self::formatVariablesForPrompt($healthVariables);
@@ -52,6 +68,40 @@ class HealthExtractionPrompts
         ];
     }
 
+    public static function habitExtractionPrompt(string $habitText, array $habitVariables): array
+    {
+        $variablesList = self::formatVariablesForPrompt($habitVariables);
+
+        $userPrompt = "Extract health habit metrics from this user's daily log entry.
+
+                    HEALTH HABITS TO LOOK FOR:
+                    {$variablesList}
+                        
+                    USER'S HABIT LOG:
+                    {$habitText}
+                        
+                    RESPOND WITH THIS EXACT JSON FORMAT:
+                    {
+                        \"metrics\": [
+                            {\"key\": \"variable_key\", \"value\": numeric_value},
+                            {\"key\": \"variable_key\", \"value\": numeric_value}
+                        ]
+                    }
+                        
+                    IMPORTANT NOTES:
+                    - For smoking_status: 1 = smoker (smoked 100+ cigarettes in life), 2 = non-smoker
+                    - For alcohol_intake: number of drinks consumed
+                    - For activities: extract duration in minutes
+                    - For sleep: extract duration in hours
+                    - Only include habits that are clearly mentioned
+                    - Use the exact 'key' from the health habits list";
+
+        return [
+            ['role' => 'system', 'content' => self::getHabitSystemPrompt()],
+            ['role' => 'user', 'content' => $userPrompt],
+        ];
+    }
+
     protected static function formatVariablesForPrompt(array $healthVariables): string
     {
         $lines = [];
@@ -65,4 +115,3 @@ class HealthExtractionPrompts
     }
 
 }
-

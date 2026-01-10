@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\MedicalDocument;
+use App\Models\HabitLog;
 use App\Models\HealthVariable;
 use App\Prompts\HealthExtractionPrompts;
 
@@ -11,15 +12,18 @@ class HealthDataExtractionService
     protected $aiService;
     protected $medicalMetricService;
     protected $medicalDocumentService;
+    protected $habitMetricService;
 
     public function __construct(
         AIService $aiService,
         MedicalMetricService $medicalMetricService,
-        MedicalDocumentService $medicalDocumentService
+        MedicalDocumentService $medicalDocumentService,
+        HabitMetricService $habitMetricService
     ) {
         $this->aiService = $aiService;
         $this->medicalMetricService = $medicalMetricService;
         $this->medicalDocumentService = $medicalDocumentService;
+        $this->habitMetricService = $habitMetricService;
     }
 
     public function extractFromDocument(MedicalDocument $document): array
@@ -88,5 +92,66 @@ class HealthDataExtractionService
             'metrics_count' => count($parsedResponse['metrics']),
         ];
     }
-}
 
+    public function extractFromHabitLog(HabitLog $log): array
+    {
+        if (!$log->raw_text) {
+            return [
+                'success' => false,
+                'message' => 'No text found in habit log',
+            ];
+        }
+
+        // get only habit-related health variables
+        $habitVariables = HealthVariable::whereIn('key', [
+            'smoking_status',
+            'alcohol_intake',
+            'activity_moderate',
+            'activity_vigorous',
+            'sleep_duration'
+        ])->with('unit')->get()->all();
+
+        // build prompt with habit text and variables
+        $messages = HealthExtractionPrompts::habitExtractionPrompt(
+            $log->raw_text,
+            $habitVariables
+        );
+
+        try {
+            $aiResponse = $this->aiService->aiCall($messages);
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => $e->getMessage(),
+            ];
+        }
+
+        if (!$aiResponse) {
+            return [
+                'success' => false,
+                'message' => 'AI service returned empty response',
+            ];
+        }
+
+        $parsedResponse = json_decode($aiResponse, true);
+
+        if (!$parsedResponse || !isset($parsedResponse['metrics'])) {
+            return [
+                'success' => false,
+                'message' => 'Invalid AI response format: ' . $aiResponse,
+            ];
+        }
+
+        $this->habitMetricService->storeMetrics(
+            $log->user_id,
+            $log->id,
+            $parsedResponse['metrics']
+        );
+
+        return [
+            'success' => true,
+            'message' => 'Habit metrics extracted successfully',
+            'metrics_count' => count($parsedResponse['metrics']),
+        ];
+    }
+}
