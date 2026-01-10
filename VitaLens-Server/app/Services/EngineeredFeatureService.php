@@ -63,4 +63,54 @@ class EngineeredFeatureService
         return $metric ? (float) $metric->value : null;
     }
 
+    protected function getLatestMedicalMetric(User $user, string $variableKey): ?float
+    {
+        $variable = HealthVariable::where('key', $variableKey)->first();
+        
+        if (!$variable) {
+            return null;
+        }
+        
+        $metric = MedicalMetric::where('user_id', $user->id)
+            ->where('health_variable_id', $variable->id)
+            ->orderBy('measured_at', 'desc')
+            ->first();
+        
+        return $metric ? (float) $metric->value : null;
+    }
+
+    protected function getAverageHabitMetric(User $user, string $variableKey, int $days = 30): ?float
+    {
+        $variable = HealthVariable::where('key', $variableKey)->first();
+        
+        if (!$variable) {
+            return null;
+        }
+        
+        $startDate = Carbon::now()->subDays($days);
+        
+        $average = HabitMetric::where('user_id', $user->id)
+            ->where('health_variable_id', $variable->id)
+            ->where('created_at', '>=', $startDate)
+            ->avg('value');
+        
+        return $average ? round((float) $average, 2) : null;
+    }
+
+    protected function getLatestHabitMetric(User $user, string $variableKey): ?float
+    {
+        $variable = HealthVariable::where('key', $variableKey)->first();
+        
+        if (!$variable) {
+            return null;
+        }
+        
+        $metric = HabitMetric::where('user_id', $user->id)
+            ->where('health_variable_id', $variable->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        return $metric ? (float) $metric->value : null;
+    }
+
 }
