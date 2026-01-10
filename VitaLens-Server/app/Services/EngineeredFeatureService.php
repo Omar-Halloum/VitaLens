@@ -73,7 +73,6 @@ class EngineeredFeatureService
             return null;
         }
         
-        // NHANES coding: Male = 1, Female = 2
         return strtolower($user->gender) === 'male' ? 1 : 2;
     }
 
@@ -229,4 +228,3 @@ class EngineeredFeatureService
         return $formatted;
     }
 }
-
