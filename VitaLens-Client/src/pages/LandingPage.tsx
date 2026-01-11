@@ -1,22 +1,10 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import styles from '../styles/LandingPage.module.css';
 import logo from '../assets/VitaLens-logo.png';
 
 export function LandingPage() {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
+  const { isDark, toggleTheme } = useTheme();
 
   return (
     <div className={styles.page}>
@@ -38,7 +26,7 @@ export function LandingPage() {
             title="Toggle theme"
             aria-label="Toggle dark mode"
           >
-            <i className={theme === 'light' ? 'fas fa-sun' : 'fas fa-moon'}></i>
+            <i className={isDark ? 'fas fa-moon' : 'fas fa-sun'}></i>
           </button>
           <Link to="/login" className={`${styles.btn} ${styles.btnOutline}`}>
             Sign In
