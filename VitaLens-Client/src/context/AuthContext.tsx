@@ -35,11 +35,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       const authData = await apiLogin(email, password);
-      setUser(authData.user);
-      setToken(authData.authorisation.token);
+      
+      const { token, ...userData } = authData; 
+      
+      setUser(userData); 
+      setToken(token);
 
-      localStorage.setItem("user", JSON.stringify(authData.user));
-      localStorage.setItem("token", authData.authorisation.token);
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("token", token);
     } finally {
       setIsLoading(false);
     }
@@ -49,11 +52,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       const authData = await apiRegister(data);
-      setUser(authData.user);
-      setToken(authData.authorisation.token);
+      
+      // FIXED: Same fix for register
+      const { token, ...userData } = authData;
 
-      localStorage.setItem("user", JSON.stringify(authData.user));
-      localStorage.setItem("token", authData.authorisation.token);
+      setUser(userData);
+      setToken(token);
+
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("token", token);
     } finally {
       setIsLoading(false);
     }

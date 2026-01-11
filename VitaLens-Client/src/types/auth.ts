@@ -1,28 +1,24 @@
 export interface AuthUser {
   id: number;
-  username: string;
+  name: string;
   email: string;
-  gender: string;
-  birthdate: string;
+  gender: number;
+  birth_date: string;
   height: number;
   weight: number;
   created_at: string;
 }
 
-export interface AuthResponse {
-  user: AuthUser;
-  authorisation: {
-    token: string;
-    type: string;
-  };
+export interface AuthResponse extends AuthUser {
+  token: string;
 }
 
 export interface RegisterData {
-  username: string;
+  name: string;
   email: string;
   password: string;
-  gender: string;
-  birthdate: string;
+  gender: number;
+  birth_date: string;
   height: number;
   weight: number;
 }

@@ -2,20 +2,20 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import type { RegisterData } from '../types/auth';
 import logo from '../assets/VitaLens-logo.png';
 import styles from '../styles/AuthPage.module.css';
 
 export function RegisterPage() {
-  const [formData, setFormData] = useState<RegisterData>({
-    username: '',
+  const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
     gender: '',
-    birthdate: '',
+    birth_date: '',
     height: 0,
     weight: 0,
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const { register, isLoading } = useAuth();
@@ -33,10 +33,27 @@ export function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!formData.gender) {
+      setError("Please select a gender.");
+      return;
+    }
+
     try {
-      await register(formData);
+      await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        birth_date: formData.birth_date,
+        gender: parseInt(formData.gender),
+        height: formData.height,
+        weight: formData.weight,
+      });
+      
       navigate('/dashboard');
     } catch (err) {
+      // If the error is an object (validation errors), accessing .message is safe
+      // because your auth code now handles the parsing
       setError((err as Error).message || 'Registration failed');
     }
   };
@@ -67,21 +84,23 @@ export function RegisterPage() {
           {error && <div className={styles.error}>{error}</div>}
 
           <form onSubmit={handleSubmit}>
+            {/* NAME INPUT */}
             <div className={styles.formGroup}>
-              <label htmlFor="username">Username</label>
+              <label htmlFor="name">Full Name</label>
               <input
                 type="text"
-                id="username"
-                name="username"
+                id="name"
+                name="name"  // CHANGED: Matches backend
                 className={styles.formControl}
-                placeholder="Omar"
-                value={formData.username}
+                placeholder="John Doe"
+                value={formData.name}
                 onChange={handleChange}
                 required
                 disabled={isLoading}
               />
             </div>
 
+            {/* EMAIL INPUT */}
             <div className={styles.formGroup}>
               <label htmlFor="email">Email</label>
               <input
@@ -97,6 +116,7 @@ export function RegisterPage() {
               />
             </div>
 
+            {/* PASSWORD INPUT */}
             <div className={styles.formGroup}>
               <label htmlFor="password">Password</label>
               <div className={styles.passwordWrapper}>
@@ -128,6 +148,7 @@ export function RegisterPage() {
             <h2 className={styles.sectionTitle}>Your Basic Info</h2>
 
             <div className={styles.row}>
+              {/* GENDER INPUT */}
               <div className={styles.formGroup}>
                 <label htmlFor="gender">Gender</label>
                 <select
@@ -140,19 +161,20 @@ export function RegisterPage() {
                   disabled={isLoading}
                 >
                   <option value="">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="1">Male</option>   {/* Value is "1" */}
+                  <option value="2">Female</option> {/* Value is "2" */}
                 </select>
               </div>
 
+              {/* BIRTH DATE INPUT */}
               <div className={styles.formGroup}>
-                <label htmlFor="birthdate">Birth Date</label>
+                <label htmlFor="birth_date">Birth Date</label>
                 <input
                   type="date"
-                  id="birthdate"
-                  name="birthdate"
+                  id="birth_date"
+                  name="birth_date" // CHANGED: Matches backend
                   className={styles.formControl}
-                  value={formData.birthdate}
+                  value={formData.birth_date}
                   onChange={handleChange}
                   required
                   disabled={isLoading}

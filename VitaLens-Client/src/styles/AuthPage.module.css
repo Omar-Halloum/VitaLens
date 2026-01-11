@@ -83,6 +83,7 @@
   color: var(--color-prm-txt);
   cursor: pointer;
   transition: background 0.2s;
+  z-index: 1;
 }
 
 .themeToggle:hover {
@@ -90,14 +91,39 @@
 }
 
 .error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1.5px solid #ef4444;
   color: #ef4444;
-  padding: 12px;
+  padding: 14px 16px;
+  padding-right: 50px;
   border-radius: 10px;
   margin-bottom: 20px;
+  margin-top: 4px;
   font-size: 14px;
-  text-align: center;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  animation: slideDown 0.3s ease;
+}
+
+.error::before {
+  content: "\f06a";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .formGroup {
