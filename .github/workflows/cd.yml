@@ -1,0 +1,79 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy Backend to Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            
+            # 1. Pull Code (As ubuntu/root, NOT www-data)
+            cd /var/www/html/Omar-Halloum-VitaLens
+            sudo git pull origin main
+            
+            # 2. Update Backend
+            cd VitaLens-Server
+            sudo composer install --no-dev --optimize-autoloader --no-interaction
+            
+            sudo php artisan migrate --force
+            sudo php artisan config:cache
+            sudo php artisan route:cache
+            sudo php artisan view:cache
+            
+            # 3. Final Permission Fix (Crucial)
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './VitaLens-Client/package-lock.json'
+
+      - name: Build Frontend
+        working-directory: ./VitaLens-Client
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload Frontend to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          
+          source: "VitaLens-Client/dist/*"
+          target: "/var/www/html/Omar-Halloum-VitaLens/VitaLens-Client/dist"
+          strip_components: 2
+
+      - name: Set Permissions & Reload
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Ensure Apache owns the new frontend files
+            sudo chown -R www-data:www-data /var/www/html/Omar-Halloum-VitaLens/VitaLens-Client/dist
+            sudo chmod -R 755 /var/www/html/Omar-Halloum-VitaLens/VitaLens-Client/dist
+            
+            # Reload Apache to clear any PHP opcache
+            sudo systemctl reload apache2
