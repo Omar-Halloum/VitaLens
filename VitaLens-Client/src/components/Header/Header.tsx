@@ -14,7 +14,7 @@ export function Header() {
       </div>
       <div className={styles.headerActions}>
         <button
-          className={styles.iconBtn}
+          className={styles.themeToggle}
           onClick={toggleTheme}
           title="Toggle theme"
           aria-label="Toggle dark mode"

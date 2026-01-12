@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import styles from './Sidebar.module.css';
+import logo from '../../assets/VitaLens-logo.png';
 
 export function Sidebar() {
   const location = useLocation();
@@ -11,7 +12,7 @@ export function Sidebar() {
   return (
     <aside className={styles.sidebar}>
       <Link to="/" className={styles.logo}>
-        <i className="fas fa-heartbeat"></i>
+        <img src={logo} alt="VitaLens" className={styles.logoImg} />
         VitaLens
       </Link>
       <ul className={styles.navLinks}>

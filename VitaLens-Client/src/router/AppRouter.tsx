@@ -7,11 +7,11 @@ import { AuthenticatedLayout } from '../components/Layout/AuthenticatedLayout';
 import { useAuth } from '../context/AuthContext';
 
 export const AppRouter = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <Routes>

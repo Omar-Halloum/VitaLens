@@ -9,6 +9,7 @@
   height: 100vh;
   position: sticky;
   top: 0;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 .logo {
@@ -17,12 +18,13 @@
   color: var(--color-prm-txt);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
 }
 
-.logo i {
-  color: var(--color-primary);
+.logoImg {
+  height: 32px;
+  width: auto;
 }
 
 .navLinks {
