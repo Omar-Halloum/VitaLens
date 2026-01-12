@@ -49,6 +49,17 @@ jobs:
           npm ci
           npm run build
 
+      - name: Clean & Prep Frontend Directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo rm -rf /var/www/html/Omar-Halloum-VitaLens/VitaLens-Client/dist
+            mkdir -p /var/www/html/Omar-Halloum-VitaLens/VitaLens-Client/dist
+            sudo chown -R ubuntu:ubuntu /var/www/html/Omar-Halloum-VitaLens/VitaLens-Client/dist
+
       - name: Upload Frontend to Server
         uses: appleboy/scp-action@v0.1.7
         with:
