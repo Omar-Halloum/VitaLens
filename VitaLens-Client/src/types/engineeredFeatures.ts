@@ -5,12 +5,16 @@ export interface FeatureDefinition {
     description?: string;
 }
 
-export interface EngineeredFeature {
+export interface EngineeredFeatureRaw {
     id: number;
     user_id: number;
     feature_definition_id: number;
-    feature_value: string; // Decimal string from backend
+    feature_value: string; 
     created_at: string;
     updated_at: string;
     feature_definition: FeatureDefinition;
+}
+
+export interface EngineeredFeature extends Omit<EngineeredFeatureRaw, 'feature_value'> {
+    feature_value: number;
 }
