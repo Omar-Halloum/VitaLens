@@ -1,0 +1,108 @@
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.probability {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.meta {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.trendUp {
+  color: var(--danger);
+}
+
+.trendDown {
+  color: var(--success);
+}
+
+.trendStable {
+  color: var(--text-secondary);
+}
+
+.viewBtn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.75rem;
+  transition: background 0.2s ease;
+}
+
+.viewBtn:hover {
+  background: var(--primary-hover);
+}
+
+/* Empty State */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 200px;
+  cursor: default;
+}
+
+.empty:hover {
+  transform: none;
+  border-color: var(--border-color);
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  color: var(--text-tertiary);
+  margin-bottom: 1rem;
+}
+
+.emptyTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .probability {
+    font-size: 1.75rem;
+  }
+  
+  .name {
+    font-size: 1rem;
+  }
+}
