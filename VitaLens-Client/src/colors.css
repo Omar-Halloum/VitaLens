@@ -23,6 +23,20 @@
     --btn-txt: #0f172a;
     
     --cta-bg: #2ed3c6;
+    
+    /* Semantic aliases for components */
+    --card-bg: var(--color-card);
+    --bg-primary: var(--color-bg);
+    --bg-secondary: var(--color-card-hover);
+    --bg-tertiary: var(--color-card-hover);
+    --text-primary: var(--color-prm-txt);
+    --text-secondary: var(--color-sec-txt);
+    --text-tertiary: var(--color-dim-txt);
+    --border-color: var(--color-border);
+    --primary: var(--color-primary);
+    --primary-hover: var(--color-primary-hover);
+    --danger: #ef4444;
+    --success: #10b981;
 }
 
 :root[data-theme="dark"] {
@@ -49,6 +63,20 @@
     --btn-txt: #0f172a;
     
     --cta-bg: #2ed3c6;
+    
+    /* Semantic aliases for components */
+    --card-bg: var(--color-card);
+    --bg-primary: var(--color-bg);
+    --bg-secondary: var(--color-card-hover);
+    --bg-tertiary: var(--color-card-hover);
+    --text-primary: var(--color-prm-txt);
+    --text-secondary: var(--color-sec-txt);
+    --text-tertiary: var(--color-dim-txt);
+    --border-color: var(--color-border);
+    --primary: var(--color-primary);
+    --primary-hover: var(--color-primary-hover);
+    --danger: #ef4444;
+    --success: #10b981;
 }
 
 html {
