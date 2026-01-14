@@ -13,7 +13,7 @@ import styles from '../styles/DashboardPage.module.css';
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const { riskPredictions, latestFeatures, isLoading, error } = useHealthData();
+  const { riskPredictions, latestFeatures, isLoading } = useHealthData();
   
   // Chart selector states
   const [selectedHabitMetric, setSelectedHabitMetric] = useState('sleep_duration');
