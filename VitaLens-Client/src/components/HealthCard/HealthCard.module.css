@@ -1,0 +1,71 @@
+.card {
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 2rem;
+}
+
+.warning {
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid #eab308;
+}
+
+.info {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid #3b82f6;
+}
+
+.success {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+}
+
+.empty {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.warning .header {
+  color: #eab308;
+}
+
+.info .header {
+  color: #3b82f6;
+}
+
+.success .header,
+.empty .header {
+  color: #10b981;
+}
+
+.message {
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.message strong {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+  }
+  
+  .header {
+    font-size: 0.9375rem;
+  }
+  
+  .message {
+    font-size: 0.875rem;
+  }
+}
