@@ -5,7 +5,7 @@ import type { EngineeredFeature, EngineeredFeatureRaw } from "../types/engineere
 
 
 export async function fetchEngineeredFeatures(): Promise<EngineeredFeature[]> {
-  const res = await fetch(`${API_BASE_URL}/v1/engineered-features`, {
+  const res = await fetch(`${API_BASE_URL}/v1/get-engineered-features`, {
     headers: getAuthHeader(),
   });
   
