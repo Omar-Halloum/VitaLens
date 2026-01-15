@@ -5,9 +5,18 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\MedicalDocument;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class MedicalDocumentService
 {
+    protected $documentTextService;
+
+    public function __construct(DocumentTextService $documentTextService)
+    {
+        $this->documentTextService = $documentTextService;
+    }
+
     public function addDocument(User $user, UploadedFile $file): MedicalDocument
     {
         $filename = $this->generateFilename($user, $file);
@@ -26,7 +35,50 @@ class MedicalDocumentService
         
         $document->save();
 
+        $this->processOcr($document);
+
         return $document;
+    }
+
+    public function processOcr(MedicalDocument $document)
+    {
+        $absolutePath = Storage::disk('public')->path($document->file_path);
+
+        if (!file_exists($absolutePath)) {
+            throw new \Exception("OCR Error: File not found at $absolutePath");
+        }
+
+        $fileStream = fopen($absolutePath, 'r');
+
+        try {
+            $baseUrl = config('services.vitalens_intelligence.base_url');
+            $intelligenceUrl = $baseUrl . '/ocr/extract';
+
+            /** @var \Illuminate\Http\Client\Response $response */
+            $response = Http::timeout(60)
+                ->attach('file', $fileStream, basename($document->file_path))
+                ->post($intelligenceUrl, [
+                    'file_type' => $document->file_type
+                ]);
+
+            if ($response->failed()) {
+                throw new \Exception('OCR API Error: ' . $response->body());
+            }
+
+            $result = $response->json();
+            $text = $result['extracted_text'] ?? null;
+
+            if ($text) {
+                $this->documentTextService->addText($document, $text);
+            }
+
+        } catch (\Exception $e) {
+            throw new \Exception('Intelligence Service Error: ' . $e->getMessage());
+        } finally {
+            if (is_resource($fileStream)) {
+                fclose($fileStream);
+            }
+        }
     }
 
     public function getUserDocuments(User $user)

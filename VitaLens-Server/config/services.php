@@ -36,7 +36,7 @@ return [
     ],
 
     'vitalens_intelligence' => [
-        'base_url' => env('VITALENS_INTELLIGENCE_URL', 'http://127.0.0.1:8001'),
+        'base_url' => env('VITALENS_INTELLIGENCE_URL'),
     ],
 
 ];
