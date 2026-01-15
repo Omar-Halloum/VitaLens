@@ -1,0 +1,124 @@
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.selector {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.selector:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.chartContainer {
+  height: 250px;
+}
+
+/* Empty State */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 250px;
+}
+
+
+.loading {
+  width: 100%;
+  height: 100%;
+}
+
+/* Skeleton */
+.skeletonChart {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-secondary);
+  background: linear-gradient(
+    110deg,
+    var(--bg-secondary) 8%,
+    var(--color-border) 18%,
+    var(--bg-secondary) 33%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: 8px;
+}
+
+/* Minimal Mode for Sparklines */
+.minimal {
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+.minimal .chartContainer {
+  height: 100%;
+  margin-top: 0;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  color: var(--text-tertiary);
+  margin-bottom: 1rem;
+}
+
+.emptyTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+  }
+  
+  .chartContainer {
+    height: 200px;
+  }
+  
+  .title {
+    font-size: 0.9375rem;
+  }
+}

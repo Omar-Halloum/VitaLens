@@ -1,0 +1,91 @@
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  padding: 20px 24px 0;
+  margin: 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.table th {
+  text-align: left;
+  padding: 14px 24px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.nameCell {
+  min-width: 200px;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.valueCell {
+  font-weight: 600;
+  font-family: var(--font-mono, monospace);
+}
+
+.impactBadge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.high {
+  background: rgba(46, 211, 198, 0.1);
+  color: var(--primary);
+}
+
+.medium {
+  background: rgba(128, 128, 128, 0.1);
+  color: var(--text-secondary);
+}
+
+.statusNormal {
+  color: var(--success);
+  font-size: 13px;
+  font-weight: 500;
+}
