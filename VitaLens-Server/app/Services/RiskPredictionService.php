@@ -177,7 +177,7 @@ class RiskPredictionService
         
         $requirements = RiskRequirement::where('risk_type_id', $riskTypeId)
             ->with(['featureDefinition' => function($query) {
-                $query->select('id', 'feature_name', 'display_name', 'description');
+                $query->select('id', 'feature_name', 'display_name');
             }])
             ->get();
         
@@ -187,7 +187,6 @@ class RiskPredictionService
             $factors[] = [
                 'feature_name' => $requirement->featureDefinition->feature_name,
                 'display_name' => $requirement->featureDefinition->display_name,
-                'description' => $requirement->featureDefinition->description,
                 'is_required' => (bool) $requirement->is_required,
             ];
         }
