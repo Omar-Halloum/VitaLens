@@ -4,6 +4,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { AuthenticatedLayout } from '../components/Layout/AuthenticatedLayout';
+import { RiskDetailsPage } from '../pages/RiskDetailsPage';
 import { useAuth } from '../context/AuthContext';
 
 export const AppRouter = () => {
@@ -69,6 +70,16 @@ export const AppRouter = () => {
               </AuthenticatedLayout>
             } 
           />
+          <Route 
+            path="/risks/:riskKey" 
+            element={
+              <AuthenticatedLayout>
+                <RiskDetailsPage />
+              </AuthenticatedLayout>
+            } 
+          />
+          {/* Catch-all for authenticated users */}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </>
       )}
 
