@@ -53,5 +53,3 @@ export function RiskCardEmpty() {
     </div>
   );
 }
-
-// End of component

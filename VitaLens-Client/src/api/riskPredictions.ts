@@ -2,6 +2,24 @@ import { API_BASE_URL } from "../config/api";
 import { getAuthHeader } from "./authHeader";
 import type { RiskPrediction, RiskPredictionRaw } from "../types/riskPredictions";
 
+export async function fetchRiskPrediction(riskKey: string): Promise<RiskPrediction> {
+  const res = await fetch(`${API_BASE_URL}/v1/risk-predictions/${riskKey}`, {
+    headers: getAuthHeader(),
+  });
+  
+  const json = await res.json();
+  
+  if (!res.ok) {
+    throw new Error(json.payload || "Failed to fetch risk prediction");
+  }
+  
+  const raw = json.payload as RiskPredictionRaw;
+  return {
+    ...raw,
+    probability: parseFloat(raw.probability),
+  };
+}
+
 
 
 export async function fetchRiskPredictions(): Promise<RiskPrediction[]> {
