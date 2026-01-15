@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { Line, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -42,6 +41,7 @@ interface MetricChartProps {
   selectedOption?: string;
   onOptionChange?: (value: string) => void;
   isLoading?: boolean;
+  minimal?: boolean;
 }
 
 export function MetricChart({ 
@@ -53,7 +53,8 @@ export function MetricChart({
   options = [],
   selectedOption,
   onOptionChange,
-  isLoading = false
+  isLoading = false,
+  minimal = false
 }: MetricChartProps) {
   const hasData = data && data.length > 0;
   
@@ -77,6 +78,8 @@ export function MetricChart({
         tension: 0.3,
         borderRadius: type === 'bar' ? 4 : 0,
         borderSkipped: false,
+        pointRadius: minimal ? 0 : 3,
+        pointHoverRadius: minimal ? 0 : 4,
       },
     ],
   };
@@ -104,6 +107,7 @@ export function MetricChart({
     plugins: {
       legend: { display: false },
       tooltip: {
+        enabled: !minimal,
         mode: 'index' as const,
         intersect: false,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -113,6 +117,7 @@ export function MetricChart({
     },
     scales: {
       y: {
+        display: !minimal,
         beginAtZero: type === 'bar',
         min: type === 'bar' ? 0 : bounds.min,
         max: type === 'bar' ? undefined : bounds.max,
@@ -121,6 +126,7 @@ export function MetricChart({
         border: { display: true, color: gridColor }
       },
       x: {
+        display: !minimal,
         grid: { display: false },
         ticks: { color: textColor },
       },
@@ -128,22 +134,24 @@ export function MetricChart({
   };
   
   return (
-    <div className={styles.card}>
-      <div className={styles.header}>
-        <div className={styles.title}>{title}</div>
-        {showSelector && options.length > 0 && (
-          <select 
-            className={styles.selector}
-            value={selectedOption}
-            onChange={(e) => onOptionChange?.(e.target.value)}
-            disabled={isLoading}
-          >
-            {options.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-        )}
-      </div>
+    <div className={`${styles.card} ${minimal ? styles.minimal : ''}`}>
+      {!minimal && (
+        <div className={styles.header}>
+          <div className={styles.title}>{title}</div>
+          {showSelector && options.length > 0 && (
+            <select 
+              className={styles.selector}
+              value={selectedOption}
+              onChange={(e) => onOptionChange?.(e.target.value)}
+              disabled={isLoading}
+            >
+              {options.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          )}
+        </div>
+      )}
       <div className={styles.chartContainer}>
         {isLoading ? (
           <div className={`${styles.empty} ${styles.loading}`}>
