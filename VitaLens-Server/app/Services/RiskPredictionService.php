@@ -193,4 +193,24 @@ class RiskPredictionService
         
         return $factors;
     }
+
+    public function getUserTopRisk(User $user): ?array
+    {
+        $topRisk = RiskPrediction::where('user_id', $user->id)
+            ->with('riskType')
+            ->orderBy('probability', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        if (!$topRisk) {
+            return null;
+        }
+        
+        return [
+            'risk_key' => $topRisk->riskType->key,
+            'display_name' => $topRisk->riskType->display_name,
+            'probability' => $topRisk->probability,
+            'confidence_level' => $topRisk->confidence_level,
+        ];
+    }
 }
