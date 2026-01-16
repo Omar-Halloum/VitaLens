@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class HabitLog extends Model
 {
-    protected $fillable = ['user_id', 'raw_text'];
+    protected $fillable = ['user_id', 'raw_text', 'ai_insight'];
 
     public function user()
     {

@@ -78,7 +78,7 @@ class HealthDataExtractionService
             $parsedResponse['document_date'] ?? null
         );
 
-        // Update document date if found
+        // update document date if found
         if (isset($parsedResponse['document_date']) && $parsedResponse['document_date']) {
             $this->medicalDocumentService->updateDocumentDate(
                 $document,
@@ -111,10 +111,17 @@ class HealthDataExtractionService
             'sleep_duration'
         ])->with('unit')->get()->all();
 
-        // build prompt with habit text and variables
+        // fetch context for AI
+        $user = $log->user;
+        $topRisk = app(RiskPredictionService::class)->getUserTopRisk($user);
+        $recentLogs = app(HabitLogService::class)->getRecentLogs($user, 7);
+
+        // build prompt with habit text, variables, and context
         $messages = HealthExtractionPrompts::habitExtractionPrompt(
             $log->raw_text,
-            $habitVariables
+            $habitVariables,
+            $topRisk,
+            $recentLogs
         );
 
         try {
@@ -148,10 +155,16 @@ class HealthDataExtractionService
             $parsedResponse['metrics']
         );
 
+        if (isset($parsedResponse['ai_insight'])) {
+            $log->ai_insight = $parsedResponse['ai_insight'];
+            $log->save();
+        }
+
         return [
             'success' => true,
-            'message' => 'Habit metrics extracted successfully',
+            'message' => 'Habit metrics and insight extracted successfully',
             'metrics_count' => count($parsedResponse['metrics']),
+            'ai_insight' => $parsedResponse['ai_insight'] ?? null,
         ];
     }
 }
