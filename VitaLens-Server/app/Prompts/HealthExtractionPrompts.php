@@ -68,14 +68,42 @@ class HealthExtractionPrompts
         ];
     }
 
-    public static function habitExtractionPrompt(string $habitText, array $habitVariables): array
+    public static function habitExtractionPrompt(
+        string $habitText, 
+        array $habitVariables,
+        ?array $topRisk = null,
+        array $recentLogs = []
+    ): array
     {
         $variablesList = self::formatVariablesForPrompt($habitVariables);
 
-        $userPrompt = "Extract health habit metrics from this user's daily log entry.
+        $contextSection = "";
+        
+        if ($topRisk) {
+            $riskName = $topRisk['display_name'];
+            $probability = round($topRisk['probability'] * 100);
+            $contextSection .= "\nUSER'S TOP HEALTH RISK:\n";
+            $contextSection .= "- {$riskName}: {$probability}% probability\n";
+            $contextSection .= "- Mention how today's habits may affect this specific risk.\n";
+        }
+        
+        if (!empty($recentLogs)) {
+            $contextSection .= "\nPREVIOUS HABIT LOGS (for trend comparison):\n";
+            foreach ($recentLogs as $log) {
+                $metricsText = [];
+                foreach ($log['metrics'] as $key => $value) {
+                    $metricsText[] = "{$key}: {$value}";
+                }
+                $contextSection .= "- {$log['date']}: " . implode(", ", $metricsText) . "\n";
+            }
+            $contextSection .= "- Compare today's metrics with previous days to identify improving or declining trends.\n";
+        }
+
+        $userPrompt = "Extract health habit metrics from this user's daily log entry AND generate a personalized AI insight.
 
                     HEALTH HABITS TO LOOK FOR:
                     {$variablesList}
+                    {$contextSection}
                         
                     USER'S HABIT LOG:
                     {$habitText}
@@ -85,7 +113,8 @@ class HealthExtractionPrompts
                         \"metrics\": [
                             {\"key\": \"variable_key\", \"value\": numeric_value},
                             {\"key\": \"variable_key\", \"value\": numeric_value}
-                        ]
+                        ],
+                        \"ai_insight\": \"Your personalized health insight based on the log, trends, and top risk. Be specific, actionable, and encouraging. Mention the user's top risk if provided.\"
                     }
                         
                     IMPORTANT NOTES:
@@ -94,7 +123,10 @@ class HealthExtractionPrompts
                     - For activities: extract duration in minutes
                     - For sleep: extract duration in hours
                     - Only include habits that are clearly mentioned
-                    - Use the exact 'key' from the health habits list";
+                    - Use the exact 'key' from the health habits list
+                    - The ai_insight should be 2-3 sentences, friendly but professional
+                    - If previous logs show a trend (improving/declining), mention it
+                    - If a top risk is provided, explain how today's habits relate to it";
 
         return [
             ['role' => 'system', 'content' => self::getHabitSystemPrompt()],
@@ -113,5 +145,4 @@ class HealthExtractionPrompts
 
         return implode("\n", $lines);
     }
-
 }
