@@ -54,7 +54,8 @@ class HabitLogController extends Controller
             
             return $this->responseJSON([
                 'habit_log_id' => $habitLog->id,
-                'metrics_count' => $extractionResult['metrics_count']
+                'metrics_count' => $extractionResult['metrics_count'],
+                'ai_insight' => $extractionResult['ai_insight'] ?? null,
             ], "Habit logged, metrics extracted, and predictions updated successfully", 201);
         } catch (\Exception $e) {
             return $this->responseJSON(null, "Failed to log habit: " . $e->getMessage(), 500);
