@@ -3,6 +3,7 @@ import { LandingPage } from '../pages/LandingPage';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { DashboardPage } from '../pages/DashboardPage';
+import { DocumentsPage } from '../pages/DocumentsPage';
 import { AuthenticatedLayout } from '../components/Layout/AuthenticatedLayout';
 import { RiskDetailsPage } from '../pages/RiskDetailsPage';
 import { useAuth } from '../context/AuthContext';
@@ -42,7 +43,7 @@ export const AppRouter = () => {
             path="/documents" 
             element={
               <AuthenticatedLayout>
-                <div>Documents - Coming Soon</div>
+                <DocumentsPage />
               </AuthenticatedLayout>
             } 
           />
