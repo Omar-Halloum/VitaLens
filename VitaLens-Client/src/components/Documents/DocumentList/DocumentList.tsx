@@ -32,13 +32,23 @@ export function DocumentList({ documents, isLoading }: DocumentListProps) {
   }
 
   const getFileName = (filePath: string) => {
-    return filePath.split('/').pop() || filePath;
+    const fullName = filePath.split('/').pop() || filePath;
+    let cleanName = fullName.replace(/_\d{14}(\.[^.]+)$/, '$1');
+    
+    const nameMatch = cleanName.match(/^[A-Z][a-z]+_[A-Z][a-z]+_(.+)$/);
+    if (nameMatch) {
+        cleanName = nameMatch[1];
+    }
+    
+    return cleanName;
   };
 
   const getFileIcon = (fileType: string) => {
-    const type = fileType.toLowerCase();
-    if (type === 'pdf') return 'fas fa-file-pdf';
-    if (['jpg', 'jpeg', 'png'].includes(type)) return 'fas fa-file-image';
+
+    const type = fileType ? fileType.toLowerCase() : '';
+    
+    if (type.includes('pdf')) return 'fas fa-file-pdf';
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].some(ext => type.includes(ext))) return 'fas fa-file-image';
     return 'fas fa-file';
   };
 

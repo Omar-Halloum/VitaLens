@@ -34,6 +34,7 @@ export function DocumentStatusBadge({ status }: DocumentStatusBadgeProps) {
 
   return (
     <span className={`${styles.badge} ${getStatusClass()}`}>
+      {status === 'pending' && <i className="fas fa-spinner fa-spin" style={{ marginRight: '6px' }}></i>}
       {getStatusText()}
     </span>
   );
