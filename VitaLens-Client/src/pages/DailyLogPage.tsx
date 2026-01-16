@@ -1,9 +1,9 @@
 import { useGetHabitLogs } from '../hooks/useGetHabitLogs';
 import { HabitInput } from '../components/HabitLog/HabitInput/HabitInput';
 import { LogList } from '../components/HabitLog/LogList/LogList';
-import styles from '../styles/HabitLogPage.module.css';
+import styles from '../styles/DailyLogPage.module.css';
 
-export function HabitLogPage() {
+export function DailyLogPage() {
   const { data: logs = [], isLoading, refetch } = useGetHabitLogs();
 
   const handleLogSuccess = () => {
