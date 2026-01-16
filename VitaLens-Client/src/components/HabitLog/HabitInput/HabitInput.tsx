@@ -6,7 +6,7 @@ interface HabitInputProps {
   onSuccess?: () => void;
 }
 
-export function DailyInputField({ onSuccess }: HabitInputProps) {
+export function HabitInput({ onSuccess }: HabitInputProps) {
   const [habitText, setHabitText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const createMutation = useCreateHabitLog();
