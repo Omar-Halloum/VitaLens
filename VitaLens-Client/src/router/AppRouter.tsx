@@ -4,6 +4,7 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { DocumentsPage } from '../pages/DocumentsPage';
+import { DailyLogPage } from '../pages/DailyLogPage';
 import { AuthenticatedLayout } from '../components/Layout/AuthenticatedLayout';
 import { RiskDetailsPage } from '../pages/RiskDetailsPage';
 import { useAuth } from '../context/AuthContext';
@@ -51,7 +52,7 @@ export const AppRouter = () => {
             path="/logs" 
             element={
               <AuthenticatedLayout>
-                <div>Daily Logs - Coming Soon</div>
+                <DailyLogPage />
               </AuthenticatedLayout>
             } 
           />

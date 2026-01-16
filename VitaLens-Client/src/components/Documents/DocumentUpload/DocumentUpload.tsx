@@ -8,6 +8,7 @@ interface DocumentUploadProps {
 
 export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const uploadMutation = useUploadDocument();
 
   const validateFile = (file: File): string | null => {
@@ -26,18 +27,20 @@ export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
   };
 
   const handleFileUpload = useCallback((file: File) => {
-    const error = validateFile(file);
-    if (error) {
-      alert(error);
+    setError(null);
+    const validationError = validateFile(file);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     uploadMutation.mutate(file, {
       onSuccess: () => {
+        setError(null);
         onUploadSuccess?.();
       },
       onError: (err) => {
-        alert('Upload failed: ' + err.message);
+        setError('Upload failed: ' + err.message);
       },
     });
   }, [uploadMutation, onUploadSuccess]);
@@ -69,33 +72,42 @@ export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
   }, [handleFileUpload]);
 
   return (
-    <div
-      className={`${styles.uploadZone} ${isDragging ? styles.dragging : ''} ${uploadMutation.isPending ? styles.uploading : ''}`}
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-    >
-      <div className={styles.uploadIcon}>
-        <i className={uploadMutation.isPending ? 'fas fa-spinner fa-spin' : 'fas fa-cloud-upload-alt'}></i>
-      </div>
-      <div className={styles.uploadText}>
-        <h3>{uploadMutation.isPending ? 'Uploading & Parsing...' : 'Upload Medical Report'}</h3>
-        <p>PDF or image (JPEG, PNG) • Max 10MB</p>
-        {!uploadMutation.isPending && (
-          <>
-            <p className={styles.dragText}>Drag and drop your file here or</p>
-            <label htmlFor="file-input" className={styles.browseBtn}>
-              Browse Files
-            </label>
-            <input
-              id="file-input"
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={handleFileInput}
-              className={styles.fileInput}
-            />
-          </>
-        )}
+    <div className={styles.container}>
+      {error && (
+        <div className={styles.errorMessage}>
+          <i className="fas fa-exclamation-circle"></i>
+          {error}
+        </div>
+      )}
+      
+      <div
+        className={`${styles.uploadZone} ${isDragging ? styles.dragging : ''} ${uploadMutation.isPending ? styles.uploading : ''} ${error ? styles.errorZone : ''}`}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+      >
+        <div className={styles.uploadIcon}>
+          <i className={uploadMutation.isPending ? 'fas fa-spinner fa-spin' : 'fas fa-cloud-upload-alt'}></i>
+        </div>
+        <div className={styles.uploadText}>
+          <h3>{uploadMutation.isPending ? 'Uploading & Parsing...' : 'Upload Medical Report'}</h3>
+          <p>PDF or image (JPEG, PNG) • Max 10MB</p>
+          {!uploadMutation.isPending && (
+            <>
+              <p className={styles.dragText}>Drag and drop your file here or</p>
+              <label htmlFor="file-input" className={styles.browseBtn}>
+                Browse Files
+              </label>
+              <input
+                id="file-input"
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={handleFileInput}
+                className={styles.fileInput}
+              />
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
