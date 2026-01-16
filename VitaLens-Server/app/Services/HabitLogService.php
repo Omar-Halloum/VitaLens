@@ -28,4 +28,28 @@ class HabitLogService
     {
         return HabitLog::find($logId);
     }
+
+    public function getRecentLogs(User $user, int $limit = 7): array
+    {
+        $logs = HabitLog::where('user_id', $user->id)
+            ->with('habitMetrics.healthVariable')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
+        
+        $context = [];
+        foreach ($logs as $log) {
+            $metrics = [];
+            foreach ($log->habitMetrics as $metric) {
+                $metrics[$metric->healthVariable->key] = $metric->value;
+            }
+            
+            $context[] = [
+                'date' => $log->created_at->format('Y-m-d'),
+                'metrics' => $metrics,
+            ];
+        }
+        
+        return $context;
+    }
 }
