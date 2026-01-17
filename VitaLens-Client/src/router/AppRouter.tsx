@@ -5,6 +5,7 @@ import { RegisterPage } from '../pages/RegisterPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { DocumentsPage } from '../pages/DocumentsPage';
 import { DailyLogPage } from '../pages/DailyLogPage';
+import { ChatPage } from '../pages/ChatPage';
 import { AuthenticatedLayout } from '../components/Layout/AuthenticatedLayout';
 import { RiskDetailsPage } from '../pages/RiskDetailsPage';
 import { useAuth } from '../context/AuthContext';
@@ -60,7 +61,7 @@ export const AppRouter = () => {
             path="/chat" 
             element={
               <AuthenticatedLayout>
-                <div>Ask AI - Coming Soon</div>
+                <ChatPage />
               </AuthenticatedLayout>
             } 
           />
