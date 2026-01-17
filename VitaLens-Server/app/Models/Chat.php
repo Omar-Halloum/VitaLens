@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RagConversation extends Model
+class Chat extends Model
 {
     protected $fillable = ['user_id'];
 
@@ -15,6 +15,6 @@ class RagConversation extends Model
 
     public function messages()
     {
-        return $this->hasMany(RagMessage::class, 'conversation_id');
+        return $this->hasMany(ChatMessage::class, 'chat_id');
     }
 }
