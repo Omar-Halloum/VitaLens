@@ -1,0 +1,65 @@
+.chatInput {
+  display: flex;
+  gap: 12px;
+}
+
+.chatInput input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.chatInput input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.chatInput input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chatInput button {
+  background: var(--primary);
+  color: #0f172a;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatInput button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.chatInput button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chatInput button i {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .chatInput input {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .chatInput button {
+    width: 40px;
+    height: 40px;
+  }
+}
