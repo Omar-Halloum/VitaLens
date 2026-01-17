@@ -2,6 +2,7 @@ venv/
 env/
 .env
 .venv/
+chroma_data/
 
 __pycache__/
 *.py[cod]
