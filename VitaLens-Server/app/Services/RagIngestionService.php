@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use App\Models\HabitLog;
 use App\Models\MedicalDocument;
+use App\Models\User;
+use App\Models\BodyMetric;
 
 class RagIngestionService
 {
@@ -63,4 +65,61 @@ class RagIngestionService
             return false;
         }
     }
+
+    public function ingestBodyMetrics(User $user, array $metrics): bool
+    {
+        try {
+            $text = "User Profile Data:\n";
+            $text .= "Height: {$metrics['height']} cm\n" ;
+            $text .= "Weight: {$metrics['weight']} kg\n";
+            $text .= "Age: {$metrics['age']} years\n";
+            $text .= "Gender: {$metrics['gender']}";
+
+            /** @var \Illuminate\Http\Client\Response $response */
+            $response = Http::timeout(30)->post("{$this->baseUrl}/rag/ingest", [
+                'user_id' => $user->id,
+                'source_type' => 'body_metrics',
+                'source_id' => $user->id,
+                'text' => $text,
+                'date' => now()->format('Y-m-d'),
+            ]);
+
+            return $response->successful();
+
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function ingestUserRiskData(User $user): bool
+    {
+        try {
+            $risks = $user->riskPredictions()->latest()->take(3)->get();
+            
+            if ($risks->isEmpty()) {
+                return true;
+            }
+
+            $text = "Recent Risk Predictions:\n";
+            foreach ($risks as $risk) {
+                $percentage = round($risk->risk_score * 100, 1);
+                $text .= "{$risk->risk_name}: {$percentage}% risk\n";
+            }
+
+            /** @var \Illuminate\Http\Client\Response $response */
+            $response = Http::timeout(30)->post("{$this->baseUrl}/rag/ingest", [
+                'user_id' => $user->id,
+                'source_type' => 'risk_predictions',
+                'source_id' => $user->id,
+                'text' => $text,
+                'date' => now()->format('Y-m-d'),
+            ]);
+
+            return $response->successful();
+
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
 }
