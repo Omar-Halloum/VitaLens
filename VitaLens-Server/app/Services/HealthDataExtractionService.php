@@ -13,17 +13,20 @@ class HealthDataExtractionService
     protected $medicalMetricService;
     protected $medicalDocumentService;
     protected $habitMetricService;
+    protected $ragIngestionService;
 
     public function __construct(
         AIService $aiService,
         MedicalMetricService $medicalMetricService,
         MedicalDocumentService $medicalDocumentService,
-        HabitMetricService $habitMetricService
+        HabitMetricService $habitMetricService,
+        RagIngestionService $ragIngestionService
     ) {
         $this->aiService = $aiService;
         $this->medicalMetricService = $medicalMetricService;
         $this->medicalDocumentService = $medicalDocumentService;
         $this->habitMetricService = $habitMetricService;
+        $this->ragIngestionService = $ragIngestionService;
     }
 
     public function extractFromDocument(MedicalDocument $document): array
@@ -158,6 +161,8 @@ class HealthDataExtractionService
         if (isset($parsedResponse['ai_insight'])) {
             $log->ai_insight = $parsedResponse['ai_insight'];
             $log->save();
+
+            $this->ragIngestionService->ingestHabitLog($log);
         }
 
         return [
