@@ -117,8 +117,8 @@ class RagIngestionService
 
             $text = "Recent Risk Predictions:\n";
             foreach ($risks as $risk) {
-                $percentage = round($risk->risk_score * 100, 1);
-                $text .= "{$risk->risk_name}: {$percentage}% risk\n";
+                $percentage = round($risk->probability * 100, 1);
+                $text .= "{$risk->riskType->display_name}: {$percentage}% risk\n";
             }
 
             /** @var \Illuminate\Http\Client\Response $response */
