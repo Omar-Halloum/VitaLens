@@ -11,6 +11,7 @@ use App\Http\Controllers\MedicalMetricController;
 use App\Http\Controllers\HabitLogController;
 use App\Http\Controllers\EngineeredFeatureController;
 use App\Http\Controllers\RiskPredictionController;
+use App\Http\Controllers\ChatController;
 
 
 // unauthenticated routes
@@ -59,4 +60,8 @@ Route::group(["prefix" => "v1", "middleware" => "auth:api"], function (){
     Route::get('/check-data-sufficiency', [RiskPredictionController::class, 'checkDataSufficiency']);
     Route::get('/risk-history', [RiskPredictionController::class, 'getRiskHistory']);
     Route::get('/risk-history/{riskKey}', [RiskPredictionController::class, 'getRiskHistory']);
+
+    // Chat (RAG-powered AI assistant)
+    Route::get('/chat', [ChatController::class, 'getChat']);
+    Route::post('/chat/messages', [ChatController::class, 'sendMessage']);
 });
