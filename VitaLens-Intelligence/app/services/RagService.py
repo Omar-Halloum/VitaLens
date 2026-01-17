@@ -62,7 +62,7 @@ class RagService:
     
     def query(self, user_id: int, query_text: str, n_results: int = 5) -> Dict:
         if not query_text.strip():
-            return {"success": False}
+            return {"success": False, "results": []}
         
         # Generate embedding for the query itself
         query_embedding = self.embedding_model.encode(query_text).tolist()
@@ -73,7 +73,11 @@ class RagService:
             where={"user_id": str(user_id)} 
         )
         
-        return {"success": True, "results": results}
+        # Transform ChromaDB format to simple list of text chunks
+        # ChromaDB returns: {'documents': [['text1', 'text2']], 'ids': [[...]], ...}
+        documents = results.get('documents', [[]])[0] if results.get('documents') else []
+        
+        return {"success": True, "results": documents}
 
 # Dependency injection for FastAPI
 @lru_cache()
