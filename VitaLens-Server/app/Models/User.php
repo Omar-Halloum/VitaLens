@@ -36,6 +36,13 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            Chat::create(['user_id' => $user->id]);
+        });
+    }
+
     public function userType()
     {
         return $this->belongsTo(UserType::class, 'user_type_id');
@@ -71,9 +78,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(EngineeredFeature::class);
     }
 
-    public function ragConversations()
+    public function chat()
     {
-        return $this->hasMany(RagConversation::class);
+        return $this->hasOne(Chat::class);
     }
 
     public function riskPredictions()
