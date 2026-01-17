@@ -5,3 +5,7 @@ easyocr
 pymupdf
 numpy
 pillow
+chromadb
+sentence-transformers
+langchain-text-splitters
+python-dotenv
