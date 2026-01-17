@@ -11,10 +11,14 @@ use Illuminate\Support\Facades\Storage;
 class MedicalDocumentService
 {
     protected $documentTextService;
+    protected $ragIngestionService;
 
-    public function __construct(DocumentTextService $documentTextService)
-    {
+    public function __construct(
+        DocumentTextService $documentTextService,
+        RagIngestionService $ragIngestionService
+    ) {
         $this->documentTextService = $documentTextService;
+        $this->ragIngestionService = $ragIngestionService;
     }
 
     public function addDocument(User $user, UploadedFile $file): MedicalDocument
@@ -70,6 +74,8 @@ class MedicalDocumentService
 
             if ($text) {
                 $this->documentTextService->addText($document, $text);
+                
+                $this->ragIngestionService->ingestDocument($document, $text);
             }
 
         } catch (\Exception $e) {
