@@ -8,6 +8,12 @@ use App\Models\HealthVariable;
 
 class BodyMetricService
 {
+    protected $ragIngestionService;
+
+    public function __construct(RagIngestionService $ragIngestionService)
+    {
+        $this->ragIngestionService = $ragIngestionService;
+    }
     public function addMetrics(User $user, array $metrics)
     {
         // fetch all relevant HealthVariables that match the keys in the $metrics array
@@ -28,6 +34,17 @@ class BodyMetricService
             $metric->value = $value;
 
             $metric->save();
+        }
+
+        if (isset($metrics['height']) || isset($metrics['weight'])) {
+            $this->ragIngestionService->ingestBodyMetrics($user, [
+                'height' => $metrics['height'] ?? 'Not specified',
+                'weight' => $metrics['weight'] ?? 'Not specified',
+                'age' => $user->age ?? 'Not specified',
+                'gender' => $user->gender ?? 'Not specified',
+            ]);
+            
+            $this->ragIngestionService->ingestUserRiskData($user);
         }
     }
 }

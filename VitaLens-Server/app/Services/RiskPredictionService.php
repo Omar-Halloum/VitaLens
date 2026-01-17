@@ -12,13 +12,19 @@ class RiskPredictionService
 {
     protected $engineeredFeatureService;
     protected $riskTypeMap;
+    protected $ragIngestionService;
 
-    public function __construct(EngineeredFeatureService $engineeredFeatureService)
+    public function __construct(
+        EngineeredFeatureService $engineeredFeatureService,
+        RagIngestionService $ragIngestionService
+    )
     {
         $this->engineeredFeatureService = $engineeredFeatureService;
-        // cache risk type IDs
+        $this->ragIngestionService = $ragIngestionService;
+        // cache risk type IDs (keep existing code)
         $this->riskTypeMap = RiskType::pluck('id', 'key')->toArray();
     }
+    
     
     protected function getRiskTypeId(string $key): ?int
     {
@@ -66,6 +72,9 @@ class RiskPredictionService
             $riskPrediction->confidence_level = $confidenceLevel;
             $riskPrediction->save();
         }
+        
+        // ingest the new risk data into RAG
+        $this->ragIngestionService->ingestUserRiskData($user);
     }
 
     public function getUserPredictions(User $user)
