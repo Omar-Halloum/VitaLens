@@ -38,7 +38,7 @@ export function ChatPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.chatHeader}>
+      <div>
         <h1 className={styles.pageTitle}>Ask About Your Health</h1>
         <p className={styles.subtitle}>
           Ask questions about your uploaded medical reports and daily logs
