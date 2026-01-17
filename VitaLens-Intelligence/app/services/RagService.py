@@ -6,7 +6,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List, Dict, Optional
 from functools import lru_cache
 
-# Load the model GLOBALLY so it only happens once at startup
+# Load the model globally so it only happens once at startup
 # This prevents reloading the AI model on every API call.
 GLOBAL_EMBEDDING_MODEL = SentenceTransformer(os.getenv('EMBEDDING_MODEL', 'all-MiniLM-L6-v2'))
 
