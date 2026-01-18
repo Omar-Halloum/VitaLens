@@ -68,6 +68,11 @@ class RiskRequirementSeeder extends Seeder
             ],
             [
                 'risk_type_id' => $getRiskType('type_2_diabetes'),
+                'feature_definition_id' => $getFeature('activity_vigorous'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('type_2_diabetes'),
                 'feature_definition_id' => $getFeature('sleep_duration'),
                 'is_required' => false
             ],
@@ -163,6 +168,11 @@ class RiskRequirementSeeder extends Seeder
             [
                 'risk_type_id' => $getRiskType('hypertension'),
                 'feature_definition_id' => $getFeature('activity_moderate'),
+                'is_required' => false
+            ],
+            [
+                'risk_type_id' => $getRiskType('hypertension'),
+                'feature_definition_id' => $getFeature('activity_vigorous'),
                 'is_required' => false
             ],
 
