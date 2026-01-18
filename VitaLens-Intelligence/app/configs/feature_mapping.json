@@ -1,0 +1,21 @@
+{
+    "age": "RIDAGEYR",
+    "gender": "RIAGENDR",
+    "bmi": "BMXBMI",
+    "waist_circumference": "BMXWAIST",
+    "systolic_bp": "avg_systolic",
+    "diastolic_bp": "avg_diastolic",
+    "hba1c": "LBXGH",
+    "fasting_glucose": "LBXGLU",
+    "hdl_cholesterol": "LBDHDD",
+    "ldl_cholesterol": "LBDLDL",
+    "triglycerides": "LBXTR",
+    "creatinine": "LBXSCR",
+    "bun": "LBXSBU",
+    "uric_acid": "LBXSUA",
+    "smoking_status": "SMQ020",
+    "alcohol_intake": "ALQ130",
+    "activity_moderate": "PAD675",
+    "activity_vigorous": "PAD660",
+    "sleep_duration": "SLD010H"
+}
