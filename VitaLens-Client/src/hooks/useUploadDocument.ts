@@ -10,6 +10,12 @@ export const useUploadDocument = () => {
     onSuccess: () => {
       // Invalidate and refetch documents list
       queryClient.invalidateQueries({ queryKey: ['documents'] });
+      
+      // Invalidate health data to refresh Dashboard
+      queryClient.invalidateQueries({ queryKey: ['riskPredictions'] });
+      queryClient.invalidateQueries({ queryKey: ['engineeredFeatures'] });
+      queryClient.invalidateQueries({ queryKey: ['riskHistory'] });
+      queryClient.invalidateQueries({ queryKey: ['featureHistory'] });
     },
   });
 };
