@@ -7,6 +7,7 @@ use App\Models\RiskPrediction;
 use App\Models\RiskType;
 use App\Models\RiskRequirement;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class RiskPredictionService
 {
@@ -33,7 +34,6 @@ class RiskPredictionService
 
     public function predictUserRisks(User $user): array
     {
-        // Get features formatted for prediction
         $features = $this->engineeredFeatureService->formatForPrediction($user);
         
         if (empty($features)) {
@@ -43,14 +43,46 @@ class RiskPredictionService
             ];
         }
         
-        // TODO: Call Python ML service here
-
-        return [
-            'success' => true,
-            'message' => 'Features ready for prediction',
-            'features' => $features,
-            'predictions' => [] // Will be populated by Python
-        ];
+        try {
+            $baseUrl = config('services.vitalens_intelligence.base_url');
+            
+            /** @var \Illuminate\Http\Client\Response $response */
+            $response = Http::timeout(30)
+                ->post("{$baseUrl}/api/predict/all", [
+                    'user_id' => $user->id,
+                    'features' => $features
+                ]);
+            
+            if (!$response->successful()) {
+                return [
+                    'success' => false,
+                    'message' => 'ML service error'
+                ];
+            }
+            
+            $data = $response->json();
+            
+            if (!($data['success'] ?? false)) {
+                return [
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Prediction failed'
+                ];
+            }
+            
+            $this->storePredictions($user, $data['predictions'] ?? []);
+            
+            return [
+                'success' => true,
+                'message' => 'Predictions completed successfully',
+                'predictions' => $data['predictions'] ?? []
+            ];
+            
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Failed to connect to ML service'
+            ];
+        }
     }
 
     public function storePredictions(User $user, array $predictions): void
@@ -73,7 +105,7 @@ class RiskPredictionService
             $riskPrediction->save();
         }
         
-        // ingest the new risk data into RAG
+        // Ingest the new risk data into RAG
         $this->ragIngestionService->ingestUserRiskData($user);
     }
 
