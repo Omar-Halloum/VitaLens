@@ -76,7 +76,7 @@
 .browseBtn {
   display: inline-block;
   background: var(--primary);
-  color: white;
+  color:#121826;
   padding: 8px 20px;
   border-radius: 6px;
   font-weight: 500;

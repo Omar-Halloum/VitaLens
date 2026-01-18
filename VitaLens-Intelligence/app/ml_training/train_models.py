@@ -26,7 +26,7 @@ DATA_PATH = BASE_DIR / 'dataset' / 'vitalens_health_training_data.csv'
 MODELS_DIR = BASE_DIR / 'models'
 
 RISK_CONFIG = {
-    "diabetes": {
+    "type_2_diabetes": {
         "target": "DIQ010",
         "features": [
             'RIDAGEYR', 'RIAGENDR', 'BMXBMI', 'BMXWAIST', 'avg_systolic',

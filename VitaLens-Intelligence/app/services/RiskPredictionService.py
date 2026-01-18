@@ -30,7 +30,7 @@ class RiskPredictionService:
     
     # Required features for each risk, used for confidence calculation
     REQUIRED_FEATURES = {
-        'diabetes': ['age', 'gender', 'bmi', 'fasting_glucose', 'hba1c'],
+        'type_2_diabetes': ['age', 'gender', 'bmi', 'fasting_glucose', 'hba1c'],
         'heart_disease': ['age', 'gender', 'systolic_bp', 'diastolic_bp', 'ldl_cholesterol'],
         'hypertension': ['age', 'systolic_bp', 'diastolic_bp', 'bmi'],
         'kidney_disease': ['age', 'creatinine', 'bun', 'uric_acid', 'systolic_bp']
@@ -38,7 +38,7 @@ class RiskPredictionService:
     
     def _load_all_models(self):
         # Load all trained models and their feature lists
-        risk_types = ['diabetes', 'heart_disease', 'hypertension', 'kidney_disease']
+        risk_types = ['type_2_diabetes', 'heart_disease', 'hypertension', 'kidney_disease']
         
         for risk in risk_types:
             model_path = self.models_dir / risk / 'model.json'

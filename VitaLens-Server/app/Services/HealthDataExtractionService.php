@@ -11,20 +11,17 @@ class HealthDataExtractionService
 {
     protected $aiService;
     protected $medicalMetricService;
-    protected $medicalDocumentService;
     protected $habitMetricService;
     protected $ragIngestionService;
 
     public function __construct(
         AIService $aiService,
         MedicalMetricService $medicalMetricService,
-        MedicalDocumentService $medicalDocumentService,
         HabitMetricService $habitMetricService,
         RagIngestionService $ragIngestionService
     ) {
         $this->aiService = $aiService;
         $this->medicalMetricService = $medicalMetricService;
-        $this->medicalDocumentService = $medicalDocumentService;
         $this->habitMetricService = $habitMetricService;
         $this->ragIngestionService = $ragIngestionService;
     }
@@ -83,10 +80,7 @@ class HealthDataExtractionService
 
         // update document date if found
         if (isset($parsedResponse['document_date']) && $parsedResponse['document_date']) {
-            $this->medicalDocumentService->updateDocumentDate(
-                $document,
-                $parsedResponse['document_date']
-            );
+            $document->update(['document_date' => $parsedResponse['document_date']]);
         }
 
         return [

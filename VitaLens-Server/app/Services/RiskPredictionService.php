@@ -48,7 +48,7 @@ class RiskPredictionService
             
             /** @var \Illuminate\Http\Client\Response $response */
             $response = Http::timeout(30)
-                ->post("{$baseUrl}/api/predict/all", [
+                ->post("{$baseUrl}/predict/all", [
                     'user_id' => $user->id,
                     'features' => $features
                 ]);
