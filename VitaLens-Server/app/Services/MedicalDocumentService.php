@@ -7,18 +7,30 @@ use App\Models\MedicalDocument;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use App\Services\HealthDataExtractionService;
+use App\Services\EngineeredFeatureService;
+use App\Services\RiskPredictionService;
 
 class MedicalDocumentService
 {
     protected $documentTextService;
     protected $ragIngestionService;
+    protected $healthDataExtractionService;
+    protected $engineeredFeatureService;
+    protected $riskPredictionService;
 
     public function __construct(
         DocumentTextService $documentTextService,
-        RagIngestionService $ragIngestionService
+        RagIngestionService $ragIngestionService,
+        HealthDataExtractionService $healthDataExtractionService,
+        EngineeredFeatureService $engineeredFeatureService,
+        RiskPredictionService $riskPredictionService
     ) {
         $this->documentTextService = $documentTextService;
         $this->ragIngestionService = $ragIngestionService;
+        $this->healthDataExtractionService = $healthDataExtractionService;
+        $this->engineeredFeatureService = $engineeredFeatureService;
+        $this->riskPredictionService = $riskPredictionService;
     }
 
     public function addDocument(User $user, UploadedFile $file): MedicalDocument
@@ -76,6 +88,12 @@ class MedicalDocumentService
                 $this->documentTextService->addText($document, $text);
                 
                 $this->ragIngestionService->ingestDocument($document, $text);
+                
+                $this->healthDataExtractionService->extractFromDocument($document);
+                
+                $user = $document->user;
+                $this->engineeredFeatureService->prepareUserFeatures($user);
+                $this->riskPredictionService->predictUserRisks($user);
             }
 
         } catch (\Exception $e) {

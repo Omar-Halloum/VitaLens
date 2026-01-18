@@ -1,8 +1,10 @@
-from fastapi import UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from app.services.OCRService import OCRService
 
+router = APIRouter()
 ocr_service = OCRService()
 
+@router.post("/extract")
 async def extract_text(
     file: UploadFile = File(...), 
     file_type: str = Form(...)
