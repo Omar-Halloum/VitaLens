@@ -31,6 +31,7 @@ Route::post('/store-predictions', [RiskPredictionController::class, 'storePredic
 Route::group(["prefix" => "v1", "middleware" => "auth:api"], function (){
     Route::post("/logout", [AuthController::class, "logout"]);
     Route::get("/profile", [UserController::class, "getProfile"]);
+    Route::post("/update-profile", [UserController::class, "updateProfile"]);
 
     Route::post('/update-body-metrics', [BodyMetricController::class, 'updateMetrics']);
     Route::get('/body-metrics', [BodyMetricController::class, 'getUserMetrics']);
