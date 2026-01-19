@@ -22,3 +22,9 @@ export interface RegisterData {
   height: number;
   weight: number;
 }
+
+export interface UpdateProfileData {
+  name?: string;
+  weight?: number;
+  height?: number;
+}
