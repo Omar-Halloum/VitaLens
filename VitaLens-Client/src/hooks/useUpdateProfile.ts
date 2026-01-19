@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { uploadDocument } from "../api/documents";
-import type { Document } from "../types/document";
+import { updateUserProfile } from "../api/user";
+import type { AuthUser, UpdateProfileData } from "../types/auth";
 
-export const useUploadDocument = () => {
+export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<Document, Error, File>({
-    mutationFn: uploadDocument,
+  return useMutation<AuthUser, Error, UpdateProfileData>({
+    mutationFn: updateUserProfile,
     onSuccess: () => {
-      // Invalidate and refetch documents list
-      queryClient.invalidateQueries({ queryKey: ['documents'] });
+      // Invalidate user profile data
+      queryClient.invalidateQueries({ queryKey: ['userProfile'] });
       
-      // Invalidate health data to refresh Dashboard
+      // Invalidate health data to refresh Dashboard if metrics changed
       queryClient.invalidateQueries({ queryKey: ['riskPredictions'] });
       queryClient.invalidateQueries({ queryKey: ['engineeredFeatures'] });
       queryClient.invalidateQueries({ queryKey: ['riskHistory'] });

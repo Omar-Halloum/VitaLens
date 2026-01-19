@@ -9,6 +9,12 @@ export const useCreateHabitLog = () => {
     mutationFn: createHabitLog,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['habitLogs'] });
+      
+      // Invalidate health data to refresh Dashboard
+      queryClient.invalidateQueries({ queryKey: ['riskPredictions'] });
+      queryClient.invalidateQueries({ queryKey: ['engineeredFeatures'] });
+      queryClient.invalidateQueries({ queryKey: ['riskHistory'] });
+      queryClient.invalidateQueries({ queryKey: ['featureHistory'] });
     },
   });
 };

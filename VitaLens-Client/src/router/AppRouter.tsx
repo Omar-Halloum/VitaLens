@@ -8,6 +8,7 @@ import { DailyLogPage } from '../pages/DailyLogPage';
 import { ChatPage } from '../pages/ChatPage';
 import { AuthenticatedLayout } from '../components/Layout/AuthenticatedLayout';
 import { RiskDetailsPage } from '../pages/RiskDetailsPage';
+import { ProfilePage } from '../pages/ProfilePage';
 import { useAuth } from '../context/AuthContext';
 
 export const AppRouter = () => {
@@ -69,7 +70,7 @@ export const AppRouter = () => {
             path="/profile" 
             element={
               <AuthenticatedLayout>
-                <div>Profile - Coming Soon</div>
+                <ProfilePage />
               </AuthenticatedLayout>
             } 
           />
