@@ -22,6 +22,7 @@ class User extends Authenticatable implements JWTSubject
         'gender',
         'birth_date',
         'drive_folder_link',
+        'drive_folder_id',
     ];
 
     protected $hidden = [

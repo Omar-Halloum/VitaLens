@@ -66,4 +66,40 @@ class UserService
             $this->riskPredictionService->predictUserRisks($user);
         }
     }
+
+    public function importClinicPatients(array $usersData, int $clinicId): array
+    {
+        $createdUsers = [];
+
+        foreach ($usersData as $patientData) {
+            $user = new User;
+            $user->name = $patientData['name'];
+            $user->email = $patientData['email'];
+            $user->gender = $patientData['gender'];
+            $user->birth_date = $patientData['birth_date'];
+            $user->drive_folder_link = $patientData['drive_folder_link'];
+            $user->drive_folder_id = $patientData['drive_folder_id'] ?? null;
+            $user->clinic_id = $clinicId;
+            $user->user_type_id = 2;
+            $user->password = null;
+
+            $user->save();
+
+            $metrics = [];
+            if (isset($patientData['weight'])) {
+                $metrics['weight'] = $patientData['weight'];
+            }
+            if (isset($patientData['height'])) {
+                $metrics['height'] = $patientData['height'];
+            }
+
+            if (!empty($metrics)) {
+                $this->bodyMetricService->addMetrics($user, $metrics);
+            }
+
+            $createdUsers[] = $user;
+        }
+
+        return $createdUsers;
+    }
 }
