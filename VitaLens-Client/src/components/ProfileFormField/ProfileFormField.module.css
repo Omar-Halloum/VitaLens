@@ -1,0 +1,37 @@
+/* ProfileFormField.module.css - Matching qwen-profile.html form controls */
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.formControl {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+}
+
+.formControl:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.formControl[readonly] {
+  background: var(--color-card);
+  opacity: 0.8;
+}

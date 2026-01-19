@@ -9,3 +9,6 @@ chromadb
 sentence-transformers
 langchain-text-splitters
 python-dotenv
+xgboost
+pandas
+scikit-learn
