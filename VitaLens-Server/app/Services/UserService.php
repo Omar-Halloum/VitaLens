@@ -23,6 +23,29 @@ class UserService
         $this->riskPredictionService = $riskPredictionService;
     }
 
+    public function getProfile(User $user): User
+    {
+        $user->load('userType');
+        $latestWeight = $user->bodyMetrics()
+            ->whereHas('healthVariable', function($q) {
+                $q->where('key', 'weight');
+            })
+            ->orderBy('created_at', 'desc')
+            ->first();
+            
+        $latestHeight = $user->bodyMetrics()
+            ->whereHas('healthVariable', function($q) {
+                $q->where('key', 'height');
+            })
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        $user->weight = $latestWeight ? $latestWeight->value : null;
+        $user->height = $latestHeight ? $latestHeight->value : null;
+        
+        return $user;
+    }
+
     public function updateProfile(User $user, array $data): void
     {
         if (isset($data['name']) && $data['name'] !== $user->name) {

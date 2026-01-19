@@ -4,8 +4,8 @@ export interface AuthUser {
   email: string;
   gender: number;
   birth_date: string;
-  height: number;
-  weight: number;
+  height: number | null;
+  weight: number | null;
   created_at: string;
 }
 

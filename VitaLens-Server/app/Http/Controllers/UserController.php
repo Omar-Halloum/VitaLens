@@ -20,9 +20,9 @@ class UserController extends Controller
     {
         try {
             $user = $request->user();
-            $user->load('userType');
+            $userWithMetrics = $this->userService->getProfile($user);
             
-            return $this->responseJSON($user, "User profile retrieved successfully");
+            return $this->responseJSON($userWithMetrics, "User profile retrieved successfully");
             
         } catch (\Exception $e) {
             return $this->responseJSON(null, "Failed to retrieve profile: " . $e->getMessage(), 500);
