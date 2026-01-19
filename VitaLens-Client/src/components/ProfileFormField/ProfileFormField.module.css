@@ -1,0 +1,39 @@
+/* ProfileFormField.module.css */
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.formGroup:last-of-type {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.formControl {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.formControl:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.formControl[readonly] {
+  background: var(--card);
+  opacity: 0.8;
+  cursor: default;
+}
