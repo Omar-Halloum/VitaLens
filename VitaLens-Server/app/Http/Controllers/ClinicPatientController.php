@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Clinic;
 use App\Services\UserService;
 use App\Services\MedicalDocumentService;
 use App\Http\Requests\StoreClinicPatientsRequest;
@@ -22,13 +23,17 @@ class ClinicPatientController extends Controller
     public function bulkRegister(StoreClinicPatientsRequest $request)
     {
         try {
-            $usersData = $request->validated()['users'];
-            $clinicId = $request->user()->clinic_id;
+            $validated = $request->validated();
+            $folderId = $validated['folder_id'];
+            $usersData = $validated['users'];
 
-            $createdUsers = $this->userService->importClinicPatients($usersData, $clinicId);
+            $clinic = Clinic::where('drive_folder_id', $folderId)->firstOrFail();
+
+            $createdUsers = $this->userService->importClinicPatients($usersData, $clinic->id);
 
             return $this->responseJSON([
                 'count' => count($createdUsers),
+                'clinic' => $clinic->name,
                 'users' => $createdUsers
             ], 'Patients registered successfully', 201);
 
@@ -64,11 +69,6 @@ class ClinicPatientController extends Controller
             ]);
 
             $targetPatient = User::findOrFail($request->user_id);
-            $clinicManager = $request->user();
-
-            if ($targetPatient->clinic_id !== $clinicManager->clinic_id) {
-                return $this->responseJSON(null, 'Unauthorized: Patient does not belong to your clinic', 403);
-            }
 
             $document = $this->medicalDocumentService->addDocument($targetPatient, $request->file('document'));
 

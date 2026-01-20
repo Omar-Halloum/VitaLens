@@ -15,6 +15,7 @@ class StoreClinicPatientsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'folder_id' => ['required', 'string'],
             'users' => ['required', 'array', 'min:1'],
             'users.*.name' => ['required', 'string'],
             'users.*.email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -30,6 +31,7 @@ class StoreClinicPatientsRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'folder_id.required' => 'Clinic folder ID is required.',
             'users.min' => 'At least one patient is required.',
             'users.*.email.distinct' => 'Duplicate emails found in the list.',
             'users.*.gender.in' => 'Gender must be 1 (Male) or 2 (Female).',
