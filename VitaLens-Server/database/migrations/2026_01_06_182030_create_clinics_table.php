@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('contact_email');
-            $table->string('drive_folder_link'); 
+            $table->string('drive_folder_link');
+            $table->string('drive_folder_id')->nullable()->index();
             $table->timestamps();
         });
     }

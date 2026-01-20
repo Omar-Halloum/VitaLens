@@ -13,6 +13,7 @@ class Clinic extends Model
         'name',
         'contact_email',
         'drive_folder_link',
+        'drive_folder_id',
     ];
 
     public function patients()

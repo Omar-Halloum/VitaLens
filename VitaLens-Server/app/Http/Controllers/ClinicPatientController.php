@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Services\UserService;
 use App\Services\MedicalDocumentService;
-use App\Http\Requests\StoreBulkClinicPatientsRequest;
+use App\Http\Requests\StoreClinicPatientsRequest;
 
 class ClinicPatientController extends Controller
 {
@@ -19,7 +19,7 @@ class ClinicPatientController extends Controller
         $this->medicalDocumentService = $medicalDocumentService;
     }
 
-    public function bulkRegister(StoreBulkClinicPatientsRequest $request)
+    public function bulkRegister(StoreClinicPatientsRequest $request)
     {
         try {
             $usersData = $request->validated()['users'];
