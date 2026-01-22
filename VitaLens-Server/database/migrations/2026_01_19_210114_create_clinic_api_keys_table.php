@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clinics', function (Blueprint $table) {
+        Schema::create('clinic_api_keys', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('contact_email');
-            $table->string('drive_folder_link');
-            $table->string('drive_folder_id')->nullable()->index();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('key')->unique();
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clinics');
+        Schema::dropIfExists('clinic_api_keys');
     }
 };

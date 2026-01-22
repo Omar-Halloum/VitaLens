@@ -12,6 +12,7 @@ use App\Http\Controllers\HabitLogController;
 use App\Http\Controllers\EngineeredFeatureController;
 use App\Http\Controllers\RiskPredictionController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ClinicPatientController;
 
 
 // unauthenticated routes
@@ -65,4 +66,12 @@ Route::group(["prefix" => "v1", "middleware" => "auth:api"], function (){
     // Chat (RAG-powered AI assistant)
     Route::get('/chat', [ChatController::class, 'getChat']);
     Route::post('/chat/messages', [ChatController::class, 'sendMessage']);
+});
+
+// Clinic API routes (authenticated via API Key)
+Route::group(["prefix" => "clinic", "middleware" => "clinic.api"], function (){
+    Route::post('/patients', [ClinicPatientController::class, 'bulkRegister']);
+    Route::post('/match-folder', [ClinicPatientController::class, 'matchFolder']);
+    Route::post('/upload-report', [ClinicPatientController::class, 'uploadReport']);
+    Route::get('/list', [ClinicPatientController::class, 'getClinics']);
 });

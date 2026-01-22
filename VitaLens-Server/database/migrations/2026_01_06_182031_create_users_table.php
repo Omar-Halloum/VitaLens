@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('gender');
             $table->date('birth_date');
+            $table->string('drive_folder_id')->nullable()->index();
             $table->string('drive_folder_link')->nullable();
             $table->timestamps();
         });

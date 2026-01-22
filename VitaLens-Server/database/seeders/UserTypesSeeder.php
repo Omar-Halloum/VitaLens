@@ -12,5 +12,6 @@ class UserTypesSeeder extends Seeder
     {
         UserType::create(['name' => 'Admin']);
         UserType::create(['name' => 'User']);
+        UserType::create(['name' => 'Clinic Manager']);
     }
 }
