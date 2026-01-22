@@ -116,7 +116,7 @@ export function RiskDetailsPage() {
         </section>
 
         <section className={styles.section}>
-           <AIInsightCard />
+           <AIInsightCard insight={risk.ai_insight} />
         </section>
 
       </main>
