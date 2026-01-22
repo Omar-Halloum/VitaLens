@@ -119,18 +119,7 @@ export function DashboardPage() {
     <div className={styles.container}>
       <h1 className={styles.pageTitle}>Health Dashboard</h1>
 
-      {/* Header handled by layout/component, but we greet here if needed */}
-      
-      {/* 1. Health Focus (Top Alert) */}
-      <section className={styles.section}>
-        <HealthCard 
-          type="warning"
-          title="Today's Health Focus"
-          message="Your sleep duration has been below baseline for 3 consecutive days. Logging today's sleep will improve metabolic risk accuracy."
-        />
-      </section>
-
-      {/* 2. Risk Predictions (Moved Up) */}
+      {/* Risk Predictions*/}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2>Your Health Risks</h2>
@@ -155,7 +144,7 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* 3. Key Metrics Grid (What Changed) */}
+      {/* Key Metrics Grid (What Changed) */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2>What Changed This Week</h2>
@@ -182,7 +171,7 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* 4. Health Metrics Charts */}
+      {/* Health Metrics Charts */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2>Health Metrics (Last 4 Weeks)</h2>
