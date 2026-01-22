@@ -86,7 +86,7 @@ class ClinicPatientController extends Controller
         }
     }
 
-    public function listClinics()
+    public function getClinics()
     {
         try {
             $clinics = $this->clinicService->getClinics();
