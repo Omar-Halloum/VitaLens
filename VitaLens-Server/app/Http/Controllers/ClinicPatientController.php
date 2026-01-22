@@ -7,21 +7,26 @@ use App\Models\User;
 use App\Models\Clinic;
 use App\Services\UserService;
 use App\Services\MedicalDocumentService;
+use App\Services\ClinicService;
 use App\Http\Requests\StoreClinicPatientsRequest;
 
 class ClinicPatientController extends Controller
 {
     protected $userService;
     protected $medicalDocumentService;
+    protected $clinicService;
 
-    public function __construct(UserService $userService, MedicalDocumentService $medicalDocumentService)
+    public function __construct(UserService $userService, MedicalDocumentService $medicalDocumentService, ClinicService $clinicService)
     {
         $this->userService = $userService;
         $this->medicalDocumentService = $medicalDocumentService;
+        $this->clinicService = $clinicService;
     }
 
     public function bulkRegister(StoreClinicPatientsRequest $request)
     {
+        set_time_limit(600); // Allow 10 minutes for bulk import
+
         try {
             $validated = $request->validated();
             $folderId = $validated['folder_id'];
@@ -78,6 +83,20 @@ class ClinicPatientController extends Controller
 
         } catch (\Exception $e) {
             return $this->responseJSON(null, 'Failed to upload report: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function listClinics()
+    {
+        try {
+            $clinics = $this->clinicService->getClinics();
+
+            return $this->responseJSON(
+                $clinics, 
+                'Clinics retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return $this->responseJSON(null, 'Failed to fetch clinics: ' . $e->getMessage(), 500);
         }
     }
 }
