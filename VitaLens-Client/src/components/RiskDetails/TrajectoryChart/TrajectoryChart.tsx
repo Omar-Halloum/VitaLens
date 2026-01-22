@@ -31,7 +31,21 @@ export function TrajectoryChart({ history, days, isLoading }: TrajectoryChartPro
   const chartData = useMemo(() => {
     if (!history || history.length === 0) return { labels: [], values: [] };
     
-    const sorted = [...history].sort((a, b) => 
+    // Group by date and keep only the latest prediction per day
+    const byDate = history.reduce((acc, prediction) => {
+      const date = new Date(prediction.created_at);
+      const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD
+      
+      if (!acc[dateKey] || new Date(prediction.created_at) > new Date(acc[dateKey].created_at)) {
+        acc[dateKey] = prediction;
+      }
+      
+      return acc;
+    }, {} as Record<string, RiskPrediction>);
+    
+    // Convert back to array and sort
+    const deduplicated = Object.values(byDate);
+    const sorted = deduplicated.sort((a, b) => 
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
     
