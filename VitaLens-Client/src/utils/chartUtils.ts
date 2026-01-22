@@ -14,11 +14,14 @@ export function calculateChartBounds(values: number[]): { min: number; max: numb
   const range = max - min;
   
   // If range is very small (< 5%), use a fixed window around the average
+  // If range is very small (< 5), use a fixed window around the value(s)
   if (range < 5) {
     const avg = (min + max) / 2;
+    // Ensure it have at least +/- 10 padding, or 10% of value
+    const padding = Math.max(10, avg * 0.1);
     return {
-      min: Math.max(0, avg - 5),  // Show ±5% window
-      max: Math.min(100, avg + 5),
+      min: Math.max(0, Math.floor(avg - padding)),
+      max: Math.ceil(avg + padding)
     };
   }
   
