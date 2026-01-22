@@ -31,40 +31,40 @@ const thresholds: Record<string, Threshold> = {
 
 const infoFeatures = ['age', 'gender', 'weight', 'height'];
 
-export function getHealthStatus(featureName: string, value: number, gender: Gender = 'Male'): HealthStatus {
+export function getHealthStatus(featureName: string, value: number, gender: Gender): HealthStatus {
   if (infoFeatures.includes(featureName)) return 'Info';
 
   // Special Logic
   if (featureName === 'smoking_status') return value === 1 ? 'Critical' : 'Normal';
   if (featureName === 'alcohol_intake') return value > 5 ? 'Warning' : 'Normal';
 
-  let t = thresholds[featureName];
+  let threshold = thresholds[featureName];
 
   // Dynamic Gender Overrides
   if (gender === 'Female') {
     if (featureName === 'hdl_cholesterol') {
-       t = { ...t, warningMin: 50, criticalMax: 49 }; 
+       threshold = { ...threshold, warningMin: 50, criticalMax: 49 }; 
     }
     if (featureName === 'waist_circumference') {
-       t = { ...t, criticalMin: 88, warningMin: 80, warningMax: 87 };
+       threshold = { ...threshold, criticalMin: 88, warningMin: 80, warningMax: 87 };
     }
   }
 
-  if (!t) return 'Unknown';
+  if (!threshold) return 'Unknown';
 
   // Critical Checks (Priority)
-  if (t.criticalMin !== undefined && value >= t.criticalMin) return 'Critical';
-  if (t.criticalMax !== undefined && value <= t.criticalMax) return 'Critical';
+  if (threshold.criticalMin !== undefined && value >= threshold.criticalMin) return 'Critical';
+  if (threshold.criticalMax !== undefined && value <= threshold.criticalMax) return 'Critical';
   
   // Warning Checks
-  if (t.warningMin !== undefined && value >= t.warningMin) {
-      if (t.warningMax === undefined || value <= t.warningMax) return 'Warning';
+  if (threshold.warningMin !== undefined && value >= threshold.warningMin) {
+      if (threshold.warningMax === undefined || value <= threshold.warningMax) return 'Warning';
   }
-  if (t.warningMax !== undefined && value <= t.warningMax) return 'Warning';
+  if (threshold.warningMax !== undefined && value <= threshold.warningMax) return 'Warning';
 
   // Normal Range Fallbacks
-  if (t.max !== undefined && value > t.max) return 'Warning';
-  if (t.min !== undefined && value < t.min) return 'Warning';
+  if (threshold.max !== undefined && value > threshold.max) return 'Warning';
+  if (threshold.min !== undefined && value < threshold.min) return 'Warning';
 
   return 'Normal';
 }
