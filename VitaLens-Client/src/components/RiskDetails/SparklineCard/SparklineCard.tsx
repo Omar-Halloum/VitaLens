@@ -32,7 +32,19 @@ export function SparklineCard({ factor, currentValue, unit = '', days }: Sparkli
   const chartData = useMemo(() => {
     if (!history || history.length === 0) return { values: [], dates: [] };
     
-    const sorted = [...history].sort((a, b) => 
+    // Group by date and keep only the latest value per day
+    const byDate = history.reduce((acc, point) => {
+      const date = new Date(point.created_at);
+      const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD
+      
+      if (!acc[dateKey] || new Date(point.created_at) > new Date(acc[dateKey].created_at)) {
+        acc[dateKey] = point;
+      }
+      return acc;
+    }, {} as Record<string, typeof history[0]>);
+
+    // Convert back to array
+    const sorted = Object.values(byDate).sort((a, b) => 
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
     
@@ -56,7 +68,7 @@ export function SparklineCard({ factor, currentValue, unit = '', days }: Sparkli
   const yMin = range > 0 ? minVal - range * 0.15 : minVal - 1;
   const yMax = range > 0 ? maxVal + range * 0.15 : maxVal + 1;
   
-  // Calculate trend (compare first half average to second half average)
+  // Calculate feature (compare first half average to second half average)
   const trend = useMemo(() => {
     if (chartData.values.length < 4) return 'stable';
     const mid = Math.floor(chartData.values.length / 2);
@@ -82,7 +94,7 @@ export function SparklineCard({ factor, currentValue, unit = '', days }: Sparkli
         borderWidth: 2.5,
         fill: true,
         tension: 0.4,
-        pointRadius: 0,
+        pointRadius: chartData.values.length === 1 ? 6 : (chartData.values.length > 15 ? 0 : 3),
         pointHoverRadius: 4,
         pointHoverBackgroundColor: lineColor,
       },

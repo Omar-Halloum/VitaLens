@@ -14,11 +14,14 @@ export function calculateChartBounds(values: number[]): { min: number; max: numb
   const range = max - min;
   
   // If range is very small (< 5%), use a fixed window around the average
+  // If range is very small (< 5), use a fixed window around the value(s)
   if (range < 5) {
     const avg = (min + max) / 2;
+    // Ensure it have at least +/- 10 padding, or 10% of value
+    const padding = Math.max(10, avg * 0.1);
     return {
-      min: Math.max(0, avg - 5),  // Show ±5% window
-      max: Math.min(100, avg + 5),
+      min: Math.max(0, Math.floor(avg - padding)),
+      max: Math.ceil(avg + padding)
     };
   }
   
@@ -56,9 +59,9 @@ export function aggregateByWeek(
   }));
 }
 
-/**
- * Calculate feature direction based on recent history
- */
+
+// Calculate feature direction based on recent history
+
 export function calculateMetric(
   history: RiskPrediction[]
 ): 'up' | 'down' | 'stable' {
@@ -78,9 +81,9 @@ export function calculateMetric(
   return change > 0 ? 'up' : 'down';
 }
 
-/**
- * Prepare data for Chart.js Line chart
- */
+
+// Prepare data for Chart.js Line chart
+
 export function prepareChartData(
   data: Array<{ created_at: string; probability: number }>,
   range: string
@@ -116,19 +119,52 @@ export function prepareChartData(
   return { labels, values, bounds };
 }
 
-
-// Get top N features with the biggest changes
-
 export function getTopChanges(
   features: EngineeredFeature[],
+  featureHistory: Map<string, Array<{ created_at: string; feature_value: number }>>,
   limit: number = 4
 ): Array<{ name: string; value: number; change: number; changePercent: number }> {
-  // This would need historical data to calculate actual changes
-  // For now, return a placeholder structure
-  return features.slice(0, limit).map(f => ({
-    name: f.feature_definition.display_name,
-    value: f.feature_value,
-    change: 0, // TODO: Calculate from history
-    changePercent: 0,
-  }));
+  return features.slice(0, limit).map(f => {
+    const currentValue = f.feature_value;
+    const history = featureHistory.get(f.feature_definition.feature_name) || [];
+    
+    if (history.length === 0) {
+      return {
+        name: f.feature_definition.display_name,
+        value: currentValue,
+        change: 0,
+        changePercent: 0,
+      };
+    }
+    
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+    
+    // Week comparison (Average of 7-14 days ago)
+    const previousWeekValues = history.filter(h => {
+      const date = new Date(h.created_at);
+      return date >= twoWeeksAgo && date < oneWeekAgo;
+    }).map(h => h.feature_value);
+    
+    if (previousWeekValues.length === 0) {
+      return {
+        name: f.feature_definition.display_name,
+        value: currentValue,
+        change: 0,
+        changePercent: 0,
+      };
+    }
+    
+    const previousAvg = previousWeekValues.reduce((a, b) => a + b, 0) / previousWeekValues.length;
+    const change = currentValue - previousAvg;
+    const changePercent = previousAvg !== 0 ? (change / previousAvg) * 100 : 0;
+    
+    return {
+      name: f.feature_definition.display_name,
+      value: currentValue,
+      change: Math.round(change * 100) / 100,
+      changePercent: Math.round(changePercent * 10) / 10,
+    };
+  });
 }

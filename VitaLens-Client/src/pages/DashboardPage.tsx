@@ -8,14 +8,16 @@ import { MetricChart } from '../components/MetricChart/MetricChart.tsx';
 import type { ChartDataPoint } from '../components/MetricChart/MetricChart.tsx';
 import { useGetRiskHistory } from '../hooks/useGetRiskHistory';
 import { useGetFeatureHistory } from '../hooks/useGetFeatureHistory';
-import { calculateMetric, aggregateByWeek } from '../utils/chartUtils';
+import { calculateMetric, aggregateByWeek, getTopChanges } from '../utils/chartUtils';
 import styles from '../styles/DashboardPage.module.css';
+
+
+const PRIORITY_KEYS = ['sleep_duration', 'bmi', 'fasting_glucose', 'systolic_bp'];
 
 export function DashboardPage() {
   const navigate = useNavigate();
   const { riskPredictions, latestFeatures, isLoading } = useHealthData();
   
-  // Chart selector states
   const [selectedHabitMetric, setSelectedHabitMetric] = useState('sleep_duration');
   const [selectedMedicalMetric, setSelectedMedicalMetric] = useState('fasting_glucose');
   
@@ -29,9 +31,12 @@ export function DashboardPage() {
     isFetching: medicalLoading
   } = useGetFeatureHistory(selectedMedicalMetric);
   
-  const {
-    data: allRiskHistory
-  } = useGetRiskHistory('all');
+  const { data: allRiskHistory } = useGetRiskHistory('all');
+  
+  const { data: sleepHistory } = useGetFeatureHistory('sleep_duration', 14);
+  const { data: bmiHistory } = useGetFeatureHistory('bmi', 14);
+  const { data: glucoseHistory } = useGetFeatureHistory('fasting_glucose', 14);
+  const { data: bpHistory } = useGetFeatureHistory('systolic_bp', 14);
   
   // Prepare chart data with weekly aggregation (last 4 weeks only)
   const prepareChartData = (history: typeof habitHistory): ChartDataPoint[] => {
@@ -71,33 +76,43 @@ export function DashboardPage() {
     return calculateMetric(specificHistory);
   };
 
-  // Get priority metrics (with changes)
   const priorityMetrics = useMemo(() => {
     if (!latestFeatures) return [];
     
-    const priorityKeys = [
-      { key: 'sleep_duration', label: 'Sleep Duration', unit: 'hrs', icon: 'fas fa-bed' },
-      { key: 'bmi', label: 'Body Mass Index', unit: '', icon: 'fas fa-weight-scale' },
-      { key: 'fasting_glucose', label: 'Fasting Glucose', unit: 'mg/dL', icon: 'fas fa-droplet' },
-      { key: 'systolic_bp', label: 'Systolic Blood Pressure', unit: 'mmHg', icon: 'fas fa-heart-pulse' }
-    ];
-
-    return priorityKeys.map(pk => {
-      const feature = latestFeatures.find(f => f.feature_definition.feature_name === pk.key);
-      if (!feature) return null;
-      
-      // Calculate change (mock for now, ideally compare with previous week from history)
-      const change = 0; 
-      
-      return {
-        name: pk.label,
-        value: feature.feature_value,
-        unit: pk.unit,
-        change,
-        icon: pk.icon
-      };
-    }).filter((f): f is NonNullable<typeof f> => f != null);
-  }, [latestFeatures]);
+    const featureHistory = new Map<string, Array<{ created_at: string; feature_value: number }>>();
+    if (sleepHistory) featureHistory.set('sleep_duration', sleepHistory);
+    if (bmiHistory) featureHistory.set('bmi', bmiHistory);
+    if (glucoseHistory) featureHistory.set('fasting_glucose', glucoseHistory);
+    if (bpHistory) featureHistory.set('systolic_bp', bpHistory);
+    
+    const priorityFeatures = latestFeatures.filter(f => 
+      PRIORITY_KEYS.includes(f.feature_definition.feature_name)
+    );
+    
+    const changes = getTopChanges(priorityFeatures, featureHistory, 4);
+    
+    const icons = {
+      'Sleep Duration': 'fas fa-bed',
+      'Body Mass Index': 'fas fa-weight-scale',
+      'Fasting Glucose': 'fas fa-droplet',
+      'Systolic Blood Pressure': 'fas fa-heart-pulse'
+    };
+    
+    const units = {
+      'Sleep Duration': 'hrs',
+      'Body Mass Index': '',
+      'Fasting Glucose': 'mg/dL',
+      'Systolic Blood Pressure': 'mmHg'
+    };
+    
+    return changes.map(c => ({
+      name: c.name,
+      value: c.value,
+      unit: units[c.name as keyof typeof units] || '',
+      change: c.change,
+      icon: icons[c.name as keyof typeof icons] || 'fas fa-circle'
+    }));
+  }, [latestFeatures, sleepHistory, bmiHistory, glucoseHistory, bpHistory]);
 
   // Chart Options
   const habitMetrics = [
@@ -118,19 +133,8 @@ export function DashboardPage() {
   return (
     <div className={styles.container}>
       <h1 className={styles.pageTitle}>Health Dashboard</h1>
-
-      {/* Header handled by layout/component, but we greet here if needed */}
       
-      {/* 1. Health Focus (Top Alert) */}
-      <section className={styles.section}>
-        <HealthCard 
-          type="warning"
-          title="Today's Health Focus"
-          message="Your sleep duration has been below baseline for 3 consecutive days. Logging today's sleep will improve metabolic risk accuracy."
-        />
-      </section>
-
-      {/* 2. Risk Predictions (Moved Up) */}
+      {/* Risk Predictions */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2>Your Health Risks</h2>
@@ -155,7 +159,7 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* 3. Key Metrics Grid (What Changed) */}
+      {/* Key Metrics Grid (What Changed) */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2>What Changed This Week</h2>
@@ -182,7 +186,7 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* 4. Health Metrics Charts */}
+      {/* Health Metrics Charts */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2>Health Metrics (Last 4 Weeks)</h2>

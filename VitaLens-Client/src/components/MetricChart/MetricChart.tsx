@@ -78,8 +78,9 @@ export function MetricChart({
         tension: 0.3,
         borderRadius: type === 'bar' ? 4 : 0,
         borderSkipped: false,
-        pointRadius: minimal ? 0 : 3,
-        pointHoverRadius: minimal ? 0 : 4,
+        maxBarThickness: 40,
+        pointRadius: minimal ? 0 : (values.length === 1 ? 5 : 3),
+        pointHoverRadius: minimal ? 0 : 5,
       },
     ],
   };

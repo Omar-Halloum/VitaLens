@@ -23,7 +23,7 @@ export async function login(
       const error = await res.json().catch(() => ({}));
       console.error("Login error:", error); // For testing
 
-      throw new Error("Unable to sign in. Please check your credentials.");
+      throw new Error("Unable to sign in, wrong email or password");
     }
 
     const data = await res.json();

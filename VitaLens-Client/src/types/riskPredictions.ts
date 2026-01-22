@@ -12,6 +12,7 @@ export interface RiskPredictionRaw {
     risk_type_id: number;
     probability: string; 
     confidence_level: ConfidenceLevel;
+    ai_insight: string | null;
     created_at: string;
     updated_at: string;
     risk_type: RiskType;

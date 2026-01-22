@@ -76,14 +76,14 @@ export function RiskDetailsPage() {
           riskName={risk.risk_type.display_name} 
         />
         
-        {showAlert && (
+        {/*showAlert && (
           <ActionAlert
             title="Sustained Risk Increase"
             message="Risk score has shown an upward trend. Focus on improving key health factors to reduce your risk."
             actionText="Log Habits"
-            onAction={() => {/* TODO: Navigate to logs */}}
+            onAction={() =>
           />
-        )}
+        )*/}
         
         <RiskSummaryCard 
           currentRisk={risk} 
@@ -116,7 +116,7 @@ export function RiskDetailsPage() {
         </section>
 
         <section className={styles.section}>
-           <AIInsightCard />
+           <AIInsightCard insight={risk.ai_insight} />
         </section>
 
       </main>

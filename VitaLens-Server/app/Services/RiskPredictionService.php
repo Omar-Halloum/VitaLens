@@ -8,20 +8,24 @@ use App\Models\RiskType;
 use App\Models\RiskRequirement;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use App\Prompts\RiskInsightPrompts;
 
 class RiskPredictionService
 {
     protected $engineeredFeatureService;
     protected $riskTypeMap;
     protected $ragIngestionService;
+    protected $aiService;
 
     public function __construct(
         EngineeredFeatureService $engineeredFeatureService,
-        RagIngestionService $ragIngestionService
+        RagIngestionService $ragIngestionService,
+        AIService $aiService
     )
     {
         $this->engineeredFeatureService = $engineeredFeatureService;
         $this->ragIngestionService = $ragIngestionService;
+        $this->aiService = $aiService;
         // cache risk type IDs (keep existing code)
         $this->riskTypeMap = RiskType::pluck('id', 'key')->toArray();
     }
@@ -69,7 +73,7 @@ class RiskPredictionService
                 ];
             }
             
-            $this->storePredictions($user, $data['predictions'] ?? []);
+            $this->storePredictions($user, $data['predictions'] ?? [], $features);
             
             return [
                 'success' => true,
@@ -85,7 +89,7 @@ class RiskPredictionService
         }
     }
 
-    public function storePredictions(User $user, array $predictions): void
+    public function storePredictions(User $user, array $predictions, array $features = []): void
     {
         foreach ($predictions as $prediction) {
             $riskKey = $prediction['risk_type'] ?? null;
@@ -97,11 +101,15 @@ class RiskPredictionService
                 continue;
             }
             
+            $riskType = RiskType::find($riskTypeId);
+            $insight = $this->generateInsightForRisk($riskType, $probability, $features);
+            
             $riskPrediction = new RiskPrediction;
             $riskPrediction->user_id = $user->id;
             $riskPrediction->risk_type_id = $riskTypeId;
             $riskPrediction->probability = $probability;
             $riskPrediction->confidence_level = $confidenceLevel;
+            $riskPrediction->ai_insight = $insight;
             $riskPrediction->save();
         }
         
@@ -134,12 +142,7 @@ class RiskPredictionService
             ->first();
     }
 
-    public function getRiskHistory(
-        User $user, 
-        ?string $riskKey = null,
-        ?string $startDate = null,
-        ?string $endDate = null
-    )
+    public function getRiskHistory(User $user, ?string $riskKey = null, ?string $startDate = null, ?string $endDate = null)
     {
         $query = RiskPrediction::where('user_id', $user->id)
             ->with('riskType')
@@ -253,5 +256,25 @@ class RiskPredictionService
             'probability' => $topRisk->probability,
             'confidence_level' => $topRisk->confidence_level,
         ];
+    }
+
+    protected function generateInsightForRisk(RiskType $riskType, float $probability, array $features): ?string
+    {
+        try {
+            $prompt = RiskInsightPrompts::generateInsightPrompt(
+                $riskType->display_name,
+                $riskType->key,
+                $probability,
+                $features
+            );
+            
+            $aiResponse = $this->aiService->aiCall($prompt);
+            $decoded = json_decode($aiResponse, true);
+            
+            return $decoded['insight'] ?? null;
+            
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('risk_type_id')->constrained('risk_types')->onDelete('restrict');
             $table->decimal('probability', 5, 4);
             $table->string('confidence_level');
+            $table->text('ai_insight')->nullable();
             $table->timestamps();
         });
     }
