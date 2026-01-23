@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: vitalens-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_DATABASE:-vitalens}
+      MYSQL_USER: ${DB_USERNAME:-vitalens_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - vitalens-network
+
+
+  backend:
+    build:
+      context: ./Testing-VitaLens-Server
+      dockerfile: Dockerfile
+    container_name: vitalens-backend
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-vitalens}
+      - DB_USERNAME=${DB_USERNAME:-vitalens_user}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Testing-VitaLens-Server:/var/www/html
+      - backend_storage:/var/www/html/storage
+    networks:
+      - vitalens-network
+
+volumes:
+  mysql_data:
+    driver: local
+  backend_storage:
+    driver: local
+
+networks:
+  vitalens-network:
+    driver: bridge
