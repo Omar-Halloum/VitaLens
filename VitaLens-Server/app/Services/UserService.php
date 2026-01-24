@@ -62,8 +62,8 @@ class UserService
 
         if (!empty($metrics)) {
             $this->bodyMetricService->addMetrics($user, $metrics);
-            $this->engineeredFeatureService->prepareUserFeatures($user);
-            $this->riskPredictionService->predictUserRisks($user);
+            $features = $this->engineeredFeatureService->prepareUserFeatures($user);
+            $this->riskPredictionService->predictUserRisks($user, $features);
         }
     }
 

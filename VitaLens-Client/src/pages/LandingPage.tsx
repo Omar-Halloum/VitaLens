@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import styles from '../styles/LandingPage.module.css';
 import logo from '../assets/VitaLens-logo.png';
+import dashboardPreview from '../assets/Dashboard-page.png';
+import riskGraph from '../assets/Risk-graph.png';
 
 export function LandingPage() {
   const { isDark, toggleTheme } = useTheme();
@@ -51,7 +53,7 @@ export function LandingPage() {
             </a>
           </div>
           <div className={styles.heroImage}>
-            <i className="fas fa-chart-line" style={{ fontSize: '64px', opacity: 0.3 }}></i>
+            <img src={riskGraph} alt="Health Risk Graph" className={styles.graphImage} />
           </div>
         </div>
       </section>
@@ -213,10 +215,7 @@ export function LandingPage() {
                 </Link>
               </div>
               <div className={styles.dashboardImageWrapper}>
-                <div className={styles.dashboardImage}>
-                  <i className="fas fa-chart-area" style={{ fontSize: '64px', opacity: 0.2 }}></i>
-                  <span>Dashboard preview coming soon</span>
-                </div>
+                <img src={dashboardPreview} alt="Dashboard Preview" className={styles.dashboardImage} />
               </div>
             </div>
           </div>

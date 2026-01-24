@@ -41,10 +41,10 @@ class MedicalMetricController extends Controller
             }
 
             // auto trigger to recalculate features with new medical metrics
-            $this->engineeredFeatureService->prepareUserFeatures($document->user);
+            $features = $this->engineeredFeatureService->prepareUserFeatures($document->user);
             
             // auto trigger to update risk predictions
-            $this->riskPredictionService->predictUserRisks($document->user);
+            $this->riskPredictionService->predictUserRisks($document->user, $features);
 
             return $this->responseJSON($result, "Metrics extracted and predictions updated successfully");
             

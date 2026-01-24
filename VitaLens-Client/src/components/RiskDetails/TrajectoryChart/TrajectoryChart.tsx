@@ -70,7 +70,7 @@ export function TrajectoryChart({ history, days, isLoading }: TrajectoryChartPro
     return {
       labels: sorted.map(p => {
         const date = new Date(p.created_at);
-        return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
       }),
       values: sorted.map(p => Math.round(p.probability * 100))
     };

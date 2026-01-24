@@ -47,10 +47,10 @@ class HabitLogController extends Controller
             }
             
             // auto trigger to recalculate features with new habit metrics
-            $this->engineeredFeatureService->prepareUserFeatures($user);
+            $features = $this->engineeredFeatureService->prepareUserFeatures($user);
             
             // auto trigger to update risk predictions
-            $this->riskPredictionService->predictUserRisks($user);
+            $this->riskPredictionService->predictUserRisks($user, $features);
             
             return $this->responseJSON([
                 'habit_log_id' => $habitLog->id,

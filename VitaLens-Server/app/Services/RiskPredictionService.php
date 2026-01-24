@@ -36,9 +36,11 @@ class RiskPredictionService
         return $this->riskTypeMap[$key] ?? null;
     }
 
-    public function predictUserRisks(User $user): array
+    public function predictUserRisks(User $user, ?array $features = null): array
     {
-        $features = $this->engineeredFeatureService->formatForPrediction($user);
+        if ($features === null) {
+            $features = $this->engineeredFeatureService->formatForPrediction($user);
+        }
         
         if (empty($features)) {
             return [
