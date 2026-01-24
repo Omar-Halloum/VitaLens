@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useGetChat } from '../hooks/useGetChat';
 import { useSendMessage } from '../hooks/useSendMessage';
-import type { ChatMessage as ChatMessageType } from '../types/chat';
 import { ChatMessage } from '../components/Chat/ChatMessage/ChatMessage';
 import { ChatInput } from '../components/Chat/ChatInput/ChatInput';
+import { TypingIndicator } from '../components/Chat/TypingIndicator/TypingIndicator';
 import styles from '../styles/ChatPage.module.css';
+
 
 export function ChatPage() {
   const [input, setInput] = useState('');
@@ -13,7 +14,7 @@ export function ChatPage() {
   const { data: chat, isLoading } = useGetChat();
   const sendMessageMutation = useSendMessage();
 
-  const messages: ChatMessageType[] = chat?.messages || [];
+  const messages = useMemo(() => chat?.messages || [], [chat?.messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -21,6 +22,13 @@ export function ChatPage() {
 
   useEffect(() => {
     scrollToBottom();
+  }, [messages]);
+
+  // Show typing indicator if the last message was from the user
+  const showTypingIndicator = useMemo(() => {
+    if (messages.length === 0) return false;
+    const lastMessage = messages[messages.length - 1];
+    return lastMessage.role === 'user';
   }, [messages]);
 
   const handleSend = async () => {
@@ -64,6 +72,7 @@ export function ChatPage() {
             />
           ))
         )}
+        {showTypingIndicator && <TypingIndicator />}
         <div ref={messagesEndRef} />
       </div>
 
