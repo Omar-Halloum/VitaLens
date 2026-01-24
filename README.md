@@ -13,9 +13,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!-- project overview -->
 <img src="./readme/card-titles/title2.svg"/>
 
-> Description here.
->
-> Description here.
+> 
+> VitaLens is a comprehensive health intelligence platform designed to be the bridge between raw clinical data and meaningful understanding. The main goal of VitaLens is to automate the processing of patient medical records through smart workflows, and then leverage Machine Learning to offer risk prdeictions and data-driven insights.
+> 
 
 <br><br>
 
