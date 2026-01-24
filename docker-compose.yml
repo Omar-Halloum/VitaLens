@@ -36,7 +36,7 @@ services:
       - DB_USERNAME=${DB_USERNAME:-vitalens_user}
       - DB_PASSWORD=${DB_PASSWORD:-password}
     ports:
-      - "8000:8000"
+      - "80:8000"
     volumes:
       - ./Testing-VitaLens-Server:/var/www/html
       - backend_storage:/var/www/html/storage
