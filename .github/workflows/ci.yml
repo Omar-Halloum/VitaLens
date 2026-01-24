@@ -39,7 +39,9 @@ jobs:
           docker compose exec -T mysql mysqladmin ping -h localhost --silent
 
       - name: Copy .env into container
-        run: docker cp VitaLens-Server/.env vitalens-backend:/var/www/html/.env
+        run: |
+          docker cp VitaLens-Server/.env vitalens-backend:/var/www/html/.env
+          docker compose exec -T backend chown www-data:www-data /var/www/html/.env
 
       - name: Generate application key
         run: docker compose exec -T backend php artisan key:generate
