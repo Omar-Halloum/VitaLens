@@ -1,27 +1,34 @@
-<img src="./readme/title1.svg"/>
+<img src="./readme/card-titles/title1.svg"/>
+
+<br><br>
+
+## License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 <br><br>
 
 <!-- project overview -->
-<img src="./readme/title2.svg"/>
+<img src="./readme/card-titles/title2.svg"/>
 
-> Description here.
->
-> Description here.
+> 
+> VitaLens is a comprehensive health intelligence platform designed to be the bridge between raw clinical data and meaningful understanding. The main goal of VitaLens is to automate the processing of patient medical records through smart workflows, and then leverage Machine Learning to offer risk predictions and data-driven insights.
+> 
 
 <br><br>
 
 <!-- System Design -->
-<img src="./readme/title3.svg"/>
+<img src="./readme/card-titles/title3.svg"/>
 
-### Add Title Here
-
-- To be decided on later on.
+### System Design
+<img src="./readme/system-design/VitaLens-system-design.png"/>
 
 <br><br>
 
 <!-- Project Highlights -->
-<img src="./readme/title4.svg"/>
+<img src="./readme/card-titles/title4.svg"/>
 
 ### Add Title Here
 
@@ -30,7 +37,7 @@
 <br><br>
 
 <!-- Demo -->
-<img src="./readme/title5.svg"/>
+<img src="./readme/card-titles/title5.svg"/>
 
 ### User Screens (Mobile)
 
@@ -49,7 +56,7 @@
 <br><br>
 
 <!-- Development & Testing -->
-<img src="./readme/title6.svg"/>
+<img src="./readme/card-titles/title6.svg"/>
 
 ### Add Title Here
 
@@ -62,7 +69,7 @@
 <br><br>
 
 <!-- Deployment -->
-<img src="./readme/title7.svg"/>
+<img src="./readme/card-titles/title7.svg"/>
 
 ### Add Title Here
 
