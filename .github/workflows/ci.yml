@@ -19,7 +19,7 @@ jobs:
 
       - name: Build Laravel Backend Image
         run: |
-          cd Testing-VitaLens-Server
+          cd VitaLens-Server
           docker build -t vitalens-backend:test .
 
       - name: Set up Docker Compose
@@ -27,8 +27,8 @@ jobs:
 
       - name: Create test environment file
         run: |
-          cp Testing-VitaLens-Server/.env.example Testing-VitaLens-Server/.env
-          sed -i 's/DB_HOST=.*/DB_HOST=mysql/' Testing-VitaLens-Server/.env
+          cp VitaLens-Server/.env.example VitaLens-Server/.env
+          sed -i 's/DB_HOST=.*/DB_HOST=mysql/' VitaLens-Server/.env
 
       - name: Start services
         run: docker compose up -d mysql backend
