@@ -16,7 +16,7 @@ export function DailyLogPage() {
         <h1 className={styles.pageTitle}>Habit Journal</h1>
       </div>
 
-      <HabitInput onSuccess={handleLogSuccess} />
+      <HabitInput onSuccess={handleLogSuccess} logsCount={logs.length} />
 
       <section className={styles.historySection}>
         <div className={styles.sectionHeader}>

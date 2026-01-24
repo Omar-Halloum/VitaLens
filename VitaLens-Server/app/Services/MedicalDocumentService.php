@@ -92,8 +92,8 @@ class MedicalDocumentService
                 $this->healthDataExtractionService->extractFromDocument($document);
                 
                 $user = $document->user;
-                $this->engineeredFeatureService->prepareUserFeatures($user);
-                $this->riskPredictionService->predictUserRisks($user);
+                $features = $this->engineeredFeatureService->prepareUserFeatures($user);
+                $this->riskPredictionService->predictUserRisks($user, $features);
             }
 
         } catch (\Exception $e) {

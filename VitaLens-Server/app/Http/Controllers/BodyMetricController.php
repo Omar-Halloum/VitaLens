@@ -33,10 +33,10 @@ class BodyMetricController extends Controller
             $this->bodyMetricService->addMetrics($user, $metrics);
             
             // auto trigger to recalculate features with new body metrics
-            $this->engineeredFeatureService->prepareUserFeatures($user);
+            $features = $this->engineeredFeatureService->prepareUserFeatures($user);
             
             // auto trigger to update risk predictions
-            $this->riskPredictionService->predictUserRisks($user);
+            $this->riskPredictionService->predictUserRisks($user, $features);
             
             return $this->responseJSON($metrics, "Body metrics updated and predictions refreshed successfully", 201);
             
