@@ -21,7 +21,7 @@ services:
 
   backend:
     build:
-      context: ./Testing-VitaLens-Server
+      context: ./VitaLens-Server
       dockerfile: Dockerfile
     container_name: vitalens-backend
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
     ports:
       - "80:8000"
     volumes:
-      - ./Testing-VitaLens-Server:/var/www/html
+      - ./VitaLens-Server:/var/www/html
       - backend_storage:/var/www/html/storage
     networks:
       - vitalens-network
