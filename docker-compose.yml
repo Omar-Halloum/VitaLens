@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   mysql:
@@ -38,7 +36,6 @@ services:
     ports:
       - "80:8000"
     volumes:
-      - ./VitaLens-Server:/var/www/html
       - backend_storage:/var/www/html/storage
     networks:
       - vitalens-network
