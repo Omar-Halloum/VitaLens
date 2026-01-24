@@ -4,12 +4,23 @@ import styles from './DocumentUpload.module.css';
 
 interface DocumentUploadProps {
   onUploadSuccess?: () => void;
+  documentsCount?: number;
 }
 
-export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
+export function DocumentUpload({ onUploadSuccess, documentsCount = 0 }: DocumentUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [previousDocsCount, setPreviousDocsCount] = useState(0);
   const uploadMutation = useUploadDocument();
+
+  // Check if new document appeared
+  const isLoading = isProcessing && documentsCount <= previousDocsCount;
+
+  // Reset processing state when new document appears
+  if (isProcessing && documentsCount > previousDocsCount) {
+    setIsProcessing(false);
+  }
 
   const validateFile = (file: File): string | null => {
     const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
@@ -34,6 +45,9 @@ export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
       return;
     }
 
+    setPreviousDocsCount(documentsCount);
+    setIsProcessing(true);
+
     uploadMutation.mutate(file, {
       onSuccess: () => {
         setError(null);
@@ -41,9 +55,10 @@ export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
       },
       onError: (err) => {
         setError('Upload failed: ' + err.message);
+        setIsProcessing(false);
       },
     });
-  }, [uploadMutation, onUploadSuccess]);
+  }, [uploadMutation, onUploadSuccess, documentsCount]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -81,18 +96,18 @@ export function DocumentUpload({ onUploadSuccess }: DocumentUploadProps) {
       )}
       
       <div
-        className={`${styles.uploadZone} ${isDragging ? styles.dragging : ''} ${uploadMutation.isPending ? styles.uploading : ''} ${error ? styles.errorZone : ''}`}
+        className={`${styles.uploadZone} ${isDragging ? styles.dragging : ''} ${isLoading ? styles.uploading : ''} ${error ? styles.errorZone : ''}`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
       >
         <div className={styles.uploadIcon}>
-          <i className={uploadMutation.isPending ? 'fas fa-spinner fa-spin' : 'fas fa-cloud-upload-alt'}></i>
+          <i className={isLoading ? 'fas fa-spinner fa-spin' : 'fas fa-cloud-upload-alt'}></i>
         </div>
         <div className={styles.uploadText}>
-          <h3>{uploadMutation.isPending ? 'Uploading & Parsing...' : 'Upload Medical Report'}</h3>
+          <h3>{isLoading ? 'Uploading & Parsing...' : 'Upload Medical Report'}</h3>
           <p>PDF or image (JPEG, PNG) • Max 10MB</p>
-          {!uploadMutation.isPending && (
+          {!isLoading && (
             <>
               <p className={styles.dragText}>Drag and drop your file here or</p>
               <label htmlFor="file-input" className={styles.browseBtn}>

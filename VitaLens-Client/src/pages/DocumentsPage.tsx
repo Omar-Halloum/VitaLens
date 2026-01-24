@@ -15,7 +15,7 @@ export function DocumentsPage() {
       <h1 className={styles.pageTitle}>Medical Documents</h1>
 
       <section className={styles.section}>
-        <DocumentUpload onUploadSuccess={handleUploadSuccess} />
+        <DocumentUpload onUploadSuccess={handleUploadSuccess} documentsCount={documents.length} />
       </section>
 
       <section className={styles.section}>
