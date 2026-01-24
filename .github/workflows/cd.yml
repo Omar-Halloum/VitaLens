@@ -28,8 +28,8 @@ jobs:
       - name: Build and push Backend image
         uses: docker/build-push-action@v5
         with:
-          context: ./Testing-VitaLens-Server
-          file: ./Testing-VitaLens-Server/Dockerfile
+          context: ./VitaLens-Server
+          file: ./VitaLens-Server/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/vitalens-backend:latest
