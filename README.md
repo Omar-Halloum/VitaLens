@@ -1,9 +1,9 @@
-<img src="./readme/title1.svg"/>
+<img src="./readme/card-titles/title1.svg"/>
 
 <br><br>
 
 <!-- project overview -->
-<img src="./readme/title2.svg"/>
+<img src="./readme/card-titles/title2.svg"/>
 
 > Description here.
 >
@@ -12,7 +12,7 @@
 <br><br>
 
 <!-- System Design -->
-<img src="./readme/title3.svg"/>
+<img src="./readme/card-titles/title3.svg"/>
 
 ### Add Title Here
 
@@ -21,7 +21,7 @@
 <br><br>
 
 <!-- Project Highlights -->
-<img src="./readme/title4.svg"/>
+<img src="./readme/card-titles/title4.svg"/>
 
 ### Add Title Here
 
@@ -30,7 +30,7 @@
 <br><br>
 
 <!-- Demo -->
-<img src="./readme/title5.svg"/>
+<img src="./readme/card-titles/title5.svg"/>
 
 ### User Screens (Mobile)
 
@@ -49,7 +49,7 @@
 <br><br>
 
 <!-- Development & Testing -->
-<img src="./readme/title6.svg"/>
+<img src="./readme/card-titles/title6.svg"/>
 
 ### Add Title Here
 
@@ -62,7 +62,7 @@
 <br><br>
 
 <!-- Deployment -->
-<img src="./readme/title7.svg"/>
+<img src="./readme/card-titles/title7.svg"/>
 
 ### Add Title Here
 
