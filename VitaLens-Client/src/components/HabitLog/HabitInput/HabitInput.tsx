@@ -4,12 +4,23 @@ import styles from './HabitInput.module.css';
 
 interface HabitInputProps {
   onSuccess?: () => void;
+  logsCount?: number;
 }
 
-export function HabitInput({ onSuccess }: HabitInputProps) {
+export function HabitInput({ onSuccess, logsCount = 0 }: HabitInputProps) {
   const [habitText, setHabitText] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [previousLogsCount, setPreviousLogsCount] = useState(0);
   const createMutation = useCreateHabitLog();
+
+  // Check if new log appeared
+  const isLoading = isProcessing && logsCount <= previousLogsCount;
+
+  // Reset processing state when new log appears
+  if (isProcessing && logsCount > previousLogsCount) {
+    setIsProcessing(false);
+  }
 
   const handleSubmit = () => {
     if (!habitText.trim()) {
@@ -17,6 +28,8 @@ export function HabitInput({ onSuccess }: HabitInputProps) {
       return;
     }
     setError(null);
+    setPreviousLogsCount(logsCount);
+    setIsProcessing(true);
 
     createMutation.mutate(habitText, {
       onSuccess: () => {
@@ -26,6 +39,7 @@ export function HabitInput({ onSuccess }: HabitInputProps) {
       },
       onError: (err) => {
         setError('Failed to log habit: ' + err.message);
+        setIsProcessing(false);
       },
     });
   };
@@ -42,7 +56,7 @@ export function HabitInput({ onSuccess }: HabitInputProps) {
           if (error) setError(null);
         }}
         placeholder="Describe what you did today"
-        disabled={createMutation.isPending}
+        disabled={isLoading}
         className={error ? styles.errorInput : ''}
       />
       
@@ -56,10 +70,10 @@ export function HabitInput({ onSuccess }: HabitInputProps) {
       <button
         onClick={handleSubmit}
         className={styles.submitBtn}
-        disabled={createMutation.isPending}
+        disabled={isLoading}
       >
-        <i className={createMutation.isPending ? 'fas fa-spinner fa-spin' : 'fas fa-robot'}></i>
-        {createMutation.isPending ? 'Analyzing...' : 'Analyze with AI'}
+        <i className={isLoading ? 'fas fa-spinner fa-spin' : 'fas fa-robot'}></i>
+        {isLoading ? 'Analyzing...' : 'Analyze with AI'}
       </button>
     </div>
   );
