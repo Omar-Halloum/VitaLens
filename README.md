@@ -51,24 +51,24 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### User Screens
 
 | Landing | Login |
-| :---: | :---: |
-| <img src="./readme/demo/landing.gif" width="100%"> | <img src="./readme/demo/login.png" width="100%"> |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/landing.gif) | ![Login](./readme/demo/login.png) |
 
 | Register | Dashboard (Empty) |
-| :---: | :---: |
-| <img src="./readme/demo/register.gif" width="100%"> | <img src="./readme/demo/dashboard-empty.png" width="100%"> |
+| --------------------------------------- | ------------------------------------- |
+| ![Register](./readme/demo/register.gif) | ![Dashboard Empty](./readme/demo/dashboard-empty.png) |
 
 | Dashboard (Full) | Documents |
-| :---: | :---: |
-| <img src="./readme/demo/dashboard-full.gif" width="100%"> | <img src="./readme/demo/document-upload.gif" width="100%"> |
+| --------------------------------------- | ------------------------------------- |
+| ![Dashboard Full](./readme/demo/dashboard-full.gif) | ![Documents](./readme/demo/document-upload.gif) |
 
 | Daily Logs | AI Chat |
-| :---: | :---: |
-| <img src="./readme/demo/daily-log.gif" width="100%"> | <img src="./readme/demo/AI-chat.gif" width="100%"> |
+| --------------------------------------- | ------------------------------------- |
+| ![Daily Logs](./readme/demo/daily-log.gif) | ![AI Chat](./readme/demo/AI-chat.gif) |
 
 | Risk Details | Profile |
-| :---: | :---: |
-| <img src="./readme/demo/risk-details.gif" width="100%"> | <img src="./readme/demo/profile.png" width="100%"> |
+| --------------------------------------- | ------------------------------------- |
+| ![Risk Details](./readme/demo/risk-details.gif) | ![Profile](./readme/demo/profile.png) |
 
 
 <br><br>
