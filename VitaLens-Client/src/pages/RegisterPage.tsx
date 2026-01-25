@@ -92,7 +92,7 @@ export function RegisterPage() {
                 id="name"
                 name="name"  // CHANGED: Matches backend
                 className={styles.formControl}
-                placeholder="John Doe"
+                placeholder="Enter your name"
                 value={formData.name}
                 onChange={handleChange}
                 required

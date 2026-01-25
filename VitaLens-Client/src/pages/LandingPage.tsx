@@ -157,17 +157,17 @@ export function LandingPage() {
           <p className={styles.sectionSubtitle}>Join the growing community of health-conscious individuals using AI to stay ahead of their wellness.</p>
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <span className={styles.statNumber}>50K+</span>
+              <span className={styles.statNumber}>10K+</span>
               <div className={styles.statLabel}>Active Users</div>
               <div className={styles.statDescription}>Trust VitaLens daily</div>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statNumber}>2M+</span>
+              <span className={styles.statNumber}>50K+</span>
               <div className={styles.statLabel}>Documents Processed</div>
               <div className={styles.statDescription}>Accurately analyzed</div>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statNumber}>99.2%</span>
+              <span className={styles.statNumber}>91%</span>
               <div className={styles.statLabel}>AI Accuracy</div>
               <div className={styles.statDescription}>Medical-grade precision</div>
             </div>
