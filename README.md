@@ -50,25 +50,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### User Screens
 
-| Landing                           | Login                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/landing.gif) | ![fsdaf](./readme/demo/login.png) |
+| Landing | Login |
+| :---: | :---: |
+| <img src="./readme/demo/landing.gif" width="100%"> | <img src="./readme/demo/login.png" width="100%"> |
 
-| Register                           | Dashboard (Empty)                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/register.gif) | ![fsdaf](./readme/demo/dashboard-empty.png) |
+| Register | Dashboard (Empty) |
+| :---: | :---: |
+| <img src="./readme/demo/register.gif" width="100%"> | <img src="./readme/demo/dashboard-empty.png" width="100%"> |
 
-| Dashboard (Full)                           | Documents                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/dashboard-full.gif) | ![fsdaf](./readme/demo/document-upload.gif) |
+| Dashboard (Full) | Documents |
+| :---: | :---: |
+| <img src="./readme/demo/dashboard-full.gif" width="100%"> | <img src="./readme/demo/document-upload.gif" width="100%"> |
 
-| Daily Logs                           | AI Chat                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/daily-log.gif) | ![fsdaf](./readme/demo/AI-chat.gif) |
+| Daily Logs | AI Chat |
+| :---: | :---: |
+| <img src="./readme/demo/daily-log.gif" width="100%"> | <img src="./readme/demo/AI-chat.gif" width="100%"> |
 
-| Risk Details                           | Profile                       |
-| --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/risk-details.gif) | ![fsdaf](./readme/demo/profile.png) |
+| Risk Details | Profile |
+| :---: | :---: |
+| <img src="./readme/demo/risk-details.gif" width="100%"> | <img src="./readme/demo/profile.png" width="100%"> |
 
 
 <br><br>
