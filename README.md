@@ -39,18 +39,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!-- Demo -->
 <img src="./readme/card-titles/title5.svg"/>
 
-### User Screens (Mobile)
 
-| Login screen                            | Register screen                       | Register screen                       |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+### User Screens
 
-
-### Admin Screens (Web)
-
-| Login screen                            | Register screen                       |
+| Landing                           | Login                       |
 | --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| ![Landing](./readme/demo/landing.gif) | ![fsdaf](./readme/demo/login.png) |
+
+| Register                           | Dashboard (Empty)                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/register.gif) | ![fsdaf](./readme/demo/dashboard-empty.png) |
+
+| Dashboard (Full)                           | Documents                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/dashboard-full.gif) | ![fsdaf](./readme/demo/document-upload.gif) |
+
+| Daily Logs                           | AI Chat                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/daily-log.gif) | ![fsdaf](./readme/demo/AI-chat.gif) |
+
+| Risk Details                           | Profile                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/risk-details.gif) | ![fsdaf](./readme/demo/profile.png) |
 
 
 <br><br>
