@@ -25,6 +25,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### System Design
 <img src="./readme/system-design/VitaLens-system-design.png"/>
 
+### Entity Relationship Diagram
+
+[Eraser](https://app.eraser.io/workspace/AUjaUZ2UjylcsMpbdjEF)
+
+<img src="./readme/system-design/VitaLens-erd.png"/>
+
 <br><br>
 
 <!-- Project Highlights -->
