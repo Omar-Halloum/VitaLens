@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Sidebar } from '../Sidebar/Sidebar';
 import { Header } from '../Header/Header';
-import { HealthDataProvider } from '../../context/HealthDataContext'; // Import added
+import { HealthDataProvider } from '../../context/HealthDataContext';
 import styles from './AuthenticatedLayout.module.css';
 
 interface AuthenticatedLayoutProps {

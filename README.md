@@ -30,9 +30,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!-- Project Highlights -->
 <img src="./readme/card-titles/title4.svg"/>
 
-### Add Title Here
+### Interesting Features
 
-- List the sexy features.
+- Intelligent Medical Data Extraction: Uses OCR and NLP pipelines to automatically parse unstructured medical documents (PDFs, images) and daily habit logs, standardizing them into structured health metrics for analysis.
+- Predictive Disease Risk Modeling: A custom-trained machine learning engine that processes your historical health data to forecast risk probabilities for critical conditions like Diabetes, CKD, and Cardiovascular disease.
+- RAG-Powered Health Assistant: An interactive AI agent utilizing Retrieval-Augmented Generation to provide context-aware answers solely based on your personal medical history and uploaded reports.
+- Automated Clinic Integration (n8n): A seamless background workflow connecting Google Drive to the platform, allowing clinics to batch-upload patient records for instant, automated risk assessment and processing.
+
+<br>
+
+<img src="./readme/features/VitaLens-features.png"/>
+
 
 <br><br>
 
