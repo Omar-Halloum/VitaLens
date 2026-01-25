@@ -30,27 +30,45 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!-- Project Highlights -->
 <img src="./readme/card-titles/title4.svg"/>
 
-### Add Title Here
+### Interesting Features
 
-- List the sexy features.
+- Intelligent Medical Data Extraction: Uses OCR and NLP pipelines to automatically parse unstructured medical documents (PDFs, images) and daily habit logs, standardizing them into structured health metrics for analysis.
+- Predictive Disease Risk Modeling: A custom-trained machine learning engine that processes your historical health data to forecast risk probabilities for critical conditions like Diabetes, CKD, and Cardiovascular disease.
+- RAG-Powered Health Assistant: An interactive AI agent utilizing Retrieval-Augmented Generation to provide context-aware answers solely based on your personal medical history and uploaded reports.
+- Automated Clinic Integration (n8n): A seamless background workflow connecting Google Drive to the platform, allowing clinics to batch-upload patient records for instant, automated risk assessment and processing.
+
+<br>
+
+<img src="./readme/features/VitaLens-features.png"/>
+
 
 <br><br>
 
 <!-- Demo -->
 <img src="./readme/card-titles/title5.svg"/>
 
-### User Screens (Mobile)
 
-| Login screen                            | Register screen                       | Register screen                       |
-| --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+### User Screens
 
-
-### Admin Screens (Web)
-
-| Login screen                            | Register screen                       |
+| Landing                           | Login                       |
 | --------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| ![Landing](./readme/demo/landing.gif) | ![fsdaf](./readme/demo/login.png) |
+
+| Register                           | Dashboard (Empty)                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/register.gif) | ![fsdaf](./readme/demo/dashboard-empty.png) |
+
+| Dashboard (Full)                           | Documents                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/dashboard-full.gif) | ![fsdaf](./readme/demo/document-upload.gif) |
+
+| Daily Logs                           | AI Chat                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/daily-log.gif) | ![fsdaf](./readme/demo/AI-chat.gif) |
+
+| Risk Details                           | Profile                       |
+| --------------------------------------- | ------------------------------------- |
+| ![Landing](./readme/demo/risk-details.gif) | ![fsdaf](./readme/demo/profile.png) |
 
 
 <br><br>
