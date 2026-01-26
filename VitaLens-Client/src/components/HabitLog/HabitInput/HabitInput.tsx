@@ -37,8 +37,8 @@ export function HabitInput({ onSuccess, logsCount = 0 }: HabitInputProps) {
         setError(null);
         onSuccess?.();
       },
-      onError: (err) => {
-        setError('Failed to log habit: ' + err.message);
+      onError: () => {
+        setError('AI service currently unavailable. Please try again later.');
         setIsProcessing(false);
       },
     });

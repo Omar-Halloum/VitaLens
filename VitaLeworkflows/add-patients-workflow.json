@@ -1,0 +1,265 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "unit": "minutes"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1VZONj19-GoSdbVAM0y4_kV-2Y4gs--Qu",
+          "mode": "id"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "id": "8541afe8-b01f-4388-a809-a03b1de199f3",
+      "name": "Watch Clinic A Folder",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        2592,
+        3056
+      ],
+      "webhookId": "clinic-a-upload",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zodhyRC1HoScN9J4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Transform Data').first().json._file_id }}",
+          "mode": "id"
+        },
+        "newUpdatedFileName": "={{ $('Transform Data').first().json._file_name.replace('.xlsx', '') }}_PROCESSED_{{ $now.toFormat('yyyyMMdd_HHmm') }}.xlsx",
+        "options": {}
+      },
+      "id": "6966e903-57da-42b5-ae1d-33c3b3c58cac",
+      "name": "Mark as PROCESSED",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4160,
+        3056
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zodhyRC1HoScN9J4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "aa1d4647-d8ea-4d5d-b41a-5998ad20e24e",
+      "name": "Download Excel",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3280,
+        3056
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zodhyRC1HoScN9J4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "10def870-0a42-4914-b73c-7638851b2f60",
+      "name": "Parse Excel",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 2,
+      "position": [
+        3504,
+        3056
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\n\nconst staticData = $getWorkflowStaticData('global');\nconst fileInfo = staticData.currentFile;\n\nif (!fileInfo || !fileInfo.clinicFolderId) {\n  throw new Error('Could not retrieve clinic folder ID. Make sure Save Context node ran first.');\n}\n\nconst fileName = fileInfo.name;\nconst fileId = fileInfo.id;\nconst clinicFolderId = fileInfo.clinicFolderId;\n\nconsole.log('Processing file: ' + fileName);\nconsole.log('Clinic folder: ' + clinicFolderId);\n\nconst users = rows.map(item => {\n  const row = item.json;\n  \n  // Extract patient folder ID from drive link if exists\n  let patientFolderId = null;\n  const link = row.drive_folder_link || row['Drive Folder Link'] || '';\n  const match = link.match(/folders\\/([a-zA-Z0-9_-]+)/);\n  if (match) patientFolderId = match[1];\n  \n  // Gender normalization (1=male, 2=female)\n  const getGender = () => {\n    const gender = row.gender || row.Gender;\n    if (typeof gender === 'string') {\n      return gender.toLowerCase().includes('male') || gender === '1' ? 1 : 2;\n    }\n    return parseInt(gender) || 1;\n  };\n  \n  return {\n    name: row.name || row.Name,\n    email: row.email || row.Email,\n    gender: getGender(),\n    birth_date: row.birth_date || row.Birth_Date,\n    drive_folder_link: link,\n    drive_folder_id: patientFolderId,\n    weight: parseFloat(row.weight) || null,\n    height: parseFloat(row.height) || null\n  };\n}).filter(u => u.email && u.name);\n\nconsole.log('Registering ' + users.length + ' patients to clinic: ' + clinicFolderId);\n\nreturn [{\n  json: {\n    folder_id: clinicFolderId,\n    users: users,\n    _file_id: fileId,\n    _file_name: fileName\n  }\n}];"
+      },
+      "id": "ea56b1b9-7541-4cfb-9ff4-6576f902fd48",
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3712,
+        3056
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Save file metadata to workflow static data before download\n// This preserves the clinic folder ID through the download and parse steps\nconst file = $input.first().json;\n\nconst staticData = $getWorkflowStaticData('global');\nstaticData.currentFile = {\n  id: file.id,\n  name: file.name,\n  clinicFolderId: file.parents ? file.parents[0] : null\n};\n\nconsole.log('Saved context: ' + file.name + ' in folder ' + staticData.currentFile.clinicFolderId);\n\nreturn [{ json: file }];"
+      },
+      "id": "fc45d910-99f5-4ea9-ab04-6677a89c6292",
+      "name": "Save Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3072,
+        3056
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/api/clinic/patients",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "572c7047-ff58-454e-b855-517ac5df5f15",
+      "name": "Add Patients",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3936,
+        3056
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "nMVJIC2XEjALAsXk",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.name }}",
+              "operation": "endsWith",
+              "value2": ".xlsx"
+            },
+            {
+              "value1": "={{ $json.name }}",
+              "operation": "notContains",
+              "value2": "_PROCESSED"
+            }
+          ]
+        }
+      },
+      "id": "e300de0b-f7d0-4b34-98a5-0e1dc2404e47",
+      "name": "Filter Patients Excels",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1,
+      "position": [
+        2848,
+        3056
+      ]
+    }
+  ],
+  "connections": {
+    "Watch Clinic A Folder": {
+      "main": [
+        [
+          {
+            "node": "Filter Patients Excels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Excel": {
+      "main": [
+        [
+          {
+            "node": "Parse Excel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Excel": {
+      "main": [
+        [
+          {
+            "node": "Transform Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Data": {
+      "main": [
+        [
+          {
+            "node": "Add Patients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Context": {
+      "main": [
+        [
+          {
+            "node": "Download Excel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Patients": {
+      "main": [
+        [
+          {
+            "node": "Mark as PROCESSED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Patients Excels": {
+      "main": [
+        [
+          {
+            "node": "Save Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dcb0e54f8e87083f87ecbe973b31940cf589a11dc7b03038f4b512a8e795a849"
+  }
+}

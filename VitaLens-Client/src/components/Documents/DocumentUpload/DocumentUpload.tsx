@@ -53,8 +53,8 @@ export function DocumentUpload({ onUploadSuccess, documentsCount = 0 }: Document
         setError(null);
         onUploadSuccess?.();
       },
-      onError: (err) => {
-        setError('Upload failed: ' + err.message);
+      onError: () => {
+        setError('Upload failed. Please check your connection and try again.');
         setIsProcessing(false);
       },
     });

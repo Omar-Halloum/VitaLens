@@ -9,6 +9,7 @@ use App\Services\UserService;
 use App\Services\MedicalDocumentService;
 use App\Services\ClinicService;
 use App\Http\Requests\StoreClinicPatientsRequest;
+use App\Http\Requests\AnalyzeDocumentRequest;
 
 class ClinicPatientController extends Controller
 {
@@ -83,6 +84,23 @@ class ClinicPatientController extends Controller
 
         } catch (\Exception $e) {
             return $this->responseJSON(null, 'Failed to upload report: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function analyzeDocument(AnalyzeDocumentRequest $request)
+    {
+        try {
+            $pdfContent = $this->clinicService->analyzeDocument(
+                $request->patient_folder_id,
+                $request->file('document')
+            );
+
+            return response($pdfContent)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'attachment; filename="VitaLens_Report.pdf"');
+
+        } catch (\Exception $e) {
+            return $this->responseJSON(null, 'Failed to analyze document: ' . $e->getMessage(), 500);
         }
     }
 
