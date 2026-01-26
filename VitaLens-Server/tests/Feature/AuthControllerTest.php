@@ -147,4 +147,15 @@ class AuthControllerTest extends TestCase
                 'status' => 'Successfully logged out'
             ]);
     }
+
+    public function test_display_error()
+    {
+        $response = $this->getJson('/api/error');
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'status' => 'failure',
+                'payload' => 'Unauthorized'
+            ]);
+    }
 }
