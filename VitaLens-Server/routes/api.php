@@ -73,5 +73,6 @@ Route::group(["prefix" => "clinic", "middleware" => "clinic.api"], function (){
     Route::post('/patients', [ClinicPatientController::class, 'bulkRegister']);
     Route::post('/match-folder', [ClinicPatientController::class, 'matchFolder']);
     Route::post('/upload-report', [ClinicPatientController::class, 'uploadReport']);
+    Route::post('/analyze-document', [ClinicPatientController::class, 'analyzeDocument']);
     Route::get('/list', [ClinicPatientController::class, 'getClinics']);
 });
