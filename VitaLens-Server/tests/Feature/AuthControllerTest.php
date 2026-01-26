@@ -68,4 +68,36 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['email', 'gender', 'birth_date', 'weight', 'height']);
     }
+
+    public function test_login_success()
+    {
+        User::create([
+            'name' => 'Login User',
+            'email' => 'login@vitalens.com',
+            'password' => Hash::make('password123'),
+            'gender' => '1',
+            'birth_date' => '1990-01-01',
+            'user_type_id' => 2
+        ]);
+
+        $payload = [
+            'email' => 'login@vitalens.com',
+            'password' => 'password123'
+        ];
+
+        $response = $this->postJson('/api/login', $payload);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'Login successful'
+            ])
+            ->assertJsonStructure([
+                'payload' => [
+                    'id',
+                    'name',
+                    'email',
+                    'token'
+                ]
+            ]);
+    }
 }
