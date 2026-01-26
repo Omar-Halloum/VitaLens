@@ -100,4 +100,28 @@ class AuthControllerTest extends TestCase
                 ]
             ]);
     }
+
+    public function test_login_failure()
+    {
+        User::create([
+            'name' => 'Login User',
+            'email' => 'login@vitalens.com',
+            'password' => Hash::make('password123'),
+            'gender' => '1',
+            'birth_date' => '1990-01-01',
+            'user_type_id' => 2
+        ]);
+
+        $payload = [
+            'email' => 'login@vitalens.com',
+            'password' => 'wrongpassword'
+        ];
+
+        $response = $this->postJson('/api/login', $payload);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'status' => 'Invalid credentials'
+            ]);
+    }
 }
