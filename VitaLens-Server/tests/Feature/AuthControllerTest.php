@@ -55,4 +55,17 @@ class AuthControllerTest extends TestCase
             'name' => 'Test User'
         ]);
     }
+
+    public function test_register_failure_validation()
+    {
+        $payload = [
+            'name' => 'Test User',
+            'password' => 'password123',
+        ];
+
+        $response = $this->postJson('/api/register', $payload);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['email', 'gender', 'birth_date', 'weight', 'height']);
+    }
 }
