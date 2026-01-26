@@ -26,4 +26,3 @@ class ExtractMetricsRequest extends FormRequest
         ];
     }
 }
-
