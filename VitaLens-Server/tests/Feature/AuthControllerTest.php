@@ -124,4 +124,27 @@ class AuthControllerTest extends TestCase
                 'status' => 'Invalid credentials'
             ]);
     }
+
+    public function test_logout_success()
+    {
+        $user = User::create([
+            'name' => 'Logout User',
+            'email' => 'logout@vitalens.com',
+            'password' => Hash::make('password123'),
+            'gender' => '1',
+            'birth_date' => '1990-01-01',
+            'user_type_id' => 2
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson('/api/v1/logout');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'Successfully logged out'
+            ]);
+    }
 }
