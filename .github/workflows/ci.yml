@@ -53,7 +53,7 @@ jobs:
         run: docker compose exec -T backend php artisan db:seed --force
 
       - name: Run tests
-        run: docker compose exec -T -e APP_ENV=testing -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: backend php artisan test
+        run: 'docker compose exec -T -e APP_ENV=testing -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: backend php artisan test'
 
       - name: Tear down services
         if: always()
