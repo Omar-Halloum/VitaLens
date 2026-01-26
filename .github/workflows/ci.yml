@@ -44,7 +44,9 @@ jobs:
           docker compose exec -T backend chown www-data:www-data /var/www/html/.env
 
       - name: Generate application key
-        run: docker compose exec -T backend php artisan key:generate
+        run: |
+          docker compose exec -T backend php artisan key:generate
+          docker compose exec -T backend php artisan jwt:secret --force
 
       - name: Run migrations
         run: docker compose exec -T backend php artisan migrate --force
