@@ -153,7 +153,7 @@ class RiskPredictionControllerTest extends TestCase
         });
 
         $response = $this->withHeaders(['Authorization' => 'Bearer ' . $this->token])
-             ->getJson('/api/v1/risk-predictions/diabetes'); // 'diabetes' exists in DB
+             ->getJson('/api/v1/risk-predictions/diabetes');
 
         $response->assertStatus(404)
              ->assertJson([
