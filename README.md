@@ -88,10 +88,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Development Example
 
 
-| Services                            | Validation                       | Testing                        |
+| Services                            | Validation                       | Controller                        |
 | --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Service](./readme/development/Service_ex.png) | ![Validation](./readme/development/Validation_ex.png) | ![fsdaf](./readme/development/Test_ex.png) |
+| ![Service](./readme/development/Service_ex.png) | ![Validation](./readme/development/Validation_ex.png) | ![Controller](./readme/development/Controller_ex.png) |
 
+
+<br>
+
+### CI $ Testing
+
+| CI | Tests |
+| --------------------------------------- | ------------------------------------- |
+| ![CI](./readme/tests/CI.png) | ![Tests](./readme/tests/Test_ex.png) |
 
 <br><br>
 
