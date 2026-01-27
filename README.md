@@ -121,7 +121,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <br>
 
-### CI $ Testing
+### CI & Testing
 
 | CI | Tests |
 | --------------------------------------- | ------------------------------------- |
