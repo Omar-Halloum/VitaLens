@@ -31,6 +31,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <img src="./readme/system-design/VitaLens-erd.png"/>
 
+### n8n
+<img src="./readme/system-design/n8n-workflow.png"/>
+
 <br><br>
 
 <!-- Project Highlights -->
@@ -82,12 +85,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!-- Development & Testing -->
 <img src="./readme/card-titles/title6.svg"/>
 
-### Add Title Here
+### Development Example
 
 
 | Services                            | Validation                       | Testing                        |
 | --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| ![Service](./readme/development/Service_ex.png) | ![Validation](./readme/development/Validation_ex.png) | ![fsdaf](./readme/development/Test_ex.png) |
 
 
 <br><br>
