@@ -60,7 +60,7 @@ class RagService:
         
         return {"success": True, "count": len(chunks)}
     
-    def query(self, user_id: int, query_text: str, n_results: int = 5) -> Dict:
+    def query(self, user_id: int, query_text: str, n_results: int = 15) -> Dict:
         if not query_text.strip():
             return {"success": False, "results": []}
         

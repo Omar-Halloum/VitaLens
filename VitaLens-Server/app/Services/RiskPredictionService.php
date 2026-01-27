@@ -36,7 +36,7 @@ class RiskPredictionService
         return $this->riskTypeMap[$key] ?? null;
     }
 
-    public function predictUserRisks(User $user, ?array $features = null): array
+    public function predictUserRisks(User $user, ?array $features = null, ?string $predictionDate = null): array
     {
         if ($features === null) {
             $features = $this->engineeredFeatureService->formatForPrediction($user);
@@ -75,7 +75,7 @@ class RiskPredictionService
                 ];
             }
             
-            $this->storePredictions($user, $data['predictions'] ?? [], $features);
+            $this->storePredictions($user, $data['predictions'] ?? [], $features, $predictionDate);
             
             return [
                 'success' => true,
@@ -91,7 +91,7 @@ class RiskPredictionService
         }
     }
 
-    public function storePredictions(User $user, array $predictions, array $features = []): void
+    public function storePredictions(User $user, array $predictions, array $features = [], ?string $predictionDate = null): void
     {
         foreach ($predictions as $prediction) {
             $riskKey = $prediction['risk_type'] ?? null;
@@ -112,6 +112,12 @@ class RiskPredictionService
             $riskPrediction->probability = $probability;
             $riskPrediction->confidence_level = $confidenceLevel;
             $riskPrediction->ai_insight = $insight;
+            
+            // Backdate timestamp if date is provided
+            if ($predictionDate) {
+                $riskPrediction->created_at = $predictionDate;
+            }
+            
             $riskPrediction->save();
         }
         

@@ -91,9 +91,17 @@ class MedicalDocumentService
                 
                 $this->healthDataExtractionService->extractFromDocument($document);
                 
+                // Refresh the document to get the extracted date
+                $document->refresh();
+                
+                // Use document date for historical accuracy (backdate if older document)
+                $documentDate = $document->document_date 
+                    ? $document->document_date->format('Y-m-d') 
+                    : null;
+                
                 $user = $document->user;
-                $features = $this->engineeredFeatureService->prepareUserFeatures($user);
-                $this->riskPredictionService->predictUserRisks($user, $features);
+                $features = $this->engineeredFeatureService->prepareUserFeatures($user, $documentDate);
+                $this->riskPredictionService->predictUserRisks($user, $features, $documentDate);
             }
 
         } catch (\Exception $e) {

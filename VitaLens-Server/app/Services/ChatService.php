@@ -80,7 +80,7 @@ class ChatService
             $response = Http::timeout(30)->post("{$this->ragUrl}/rag/query", [
                 'user_id' => $userId,
                 'query' => $query,
-                'n_results' => 5,
+                'n_results' => 15,
             ]);
 
             if ($response->successful()) {
