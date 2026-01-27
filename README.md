@@ -31,6 +31,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <img src="./readme/system-design/VitaLens-erd.png"/>
 
+### n8n
+<img src="./readme/system-design/n8n-workflow.png"/>
+
 <br><br>
 
 <!-- Project Highlights -->
@@ -46,6 +49,32 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <br>
 
 <img src="./readme/features/VitaLens-features.png"/>
+
+<br>
+
+### Machine Learning Development
+
+- Dataset sourced from NHANES (National Health and Nutrition Examination Survey) with 19,431 real patient health records spanning demographics, vitals, lab results, and lifestyle factors.
+- Features 31 comprehensive health metrics including age, gender, BMI, blood pressure readings, glucose levels, HbA1c, cholesterol markers, kidney function tests, and physical activity measures.
+- Data preprocessing included median imputation for missing numeric values and stratified train/validation/test splitting (60/20/20) to maintain disease prevalence distribution.
+
+![Dataset](./readme/ml/dataset_sample.png)
+
+<br>
+
+- Trained four separate XGBoost binary classifiers to predict risk for Type 2 Diabetes, Heart Disease, Hypertension, and Chronic Kidney Disease.
+- Implemented class imbalance handling using scale_pos_weight to account for varying disease prevalence in the dataset, ensuring balanced learning across positive and negative cases.
+- Used early stopping (20 rounds patience) during training to prevent overfitting and optimize model generalization on unseen data.
+
+| Training Output | Model Performance |
+| :---: | :---: |
+| ![Training](./readme/ml/training_output.png) | ![Performance](./readme/ml/model_performance.png) |
+
+<br>
+
+- Each model uses disease-specific features selected based on medical relevance (e.g., HbA1c and glucose for diabetes, LDL and HDL cholesterol for heart disease).
+
+![Features](./readme/ml/feature_importance.png)
 
 
 <br><br>
@@ -82,13 +111,21 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!-- Development & Testing -->
 <img src="./readme/card-titles/title6.svg"/>
 
-### Add Title Here
+### Development Example
 
 
-| Services                            | Validation                       | Testing                        |
+| Services                            | Validation                       | Controller                        |
 | --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| ![Service](./readme/development/Service_ex.png) | ![Validation](./readme/development/Validation_ex.png) | ![Controller](./readme/development/Controller_ex.png) |
 
+
+<br>
+
+### CI $ Testing
+
+| CI | Tests |
+| --------------------------------------- | ------------------------------------- |
+| ![CI](./readme/tests/CI.png) | ![Tests](./readme/tests/Test_ex.png) |
 
 <br><br>
 
