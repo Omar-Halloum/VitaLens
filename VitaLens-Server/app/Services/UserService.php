@@ -102,4 +102,8 @@ class UserService
 
         return $createdUsers;
     }
+    public function getUserByFolderId(string $folderId): User
+    {
+        return User::where('drive_folder_id', $folderId)->firstOrFail();
+    }
 }

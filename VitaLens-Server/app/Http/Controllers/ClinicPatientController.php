@@ -33,7 +33,7 @@ class ClinicPatientController extends Controller
             $folderId = $validated['folder_id'];
             $usersData = $validated['users'];
 
-            $clinic = Clinic::where('drive_folder_id', $folderId)->firstOrFail();
+            $clinic = $this->clinicService->getClinicByFolderId($folderId);
 
             $createdUsers = $this->userService->importClinicPatients($usersData, $clinic->id);
 
@@ -53,7 +53,7 @@ class ClinicPatientController extends Controller
         try {
             $request->validate(['folder_id' => ['required', 'string']]);
 
-            $user = User::where('drive_folder_id', $request->folder_id)->firstOrFail();
+            $user = $this->userService->getUserByFolderId($request->folder_id);
 
             return $this->responseJSON([
                 'user_id' => $user->id,
