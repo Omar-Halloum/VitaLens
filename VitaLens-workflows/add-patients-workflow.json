@@ -13,7 +13,7 @@
         "triggerOn": "specificFolder",
         "folderToWatch": {
           "__rl": true,
-          "value": "1VZONj19-GoSdbVAM0y4_kV-2Y4gs--Qu",
+          "value": "google-drive-folder-id",
           "mode": "id"
         },
         "event": "fileCreated",

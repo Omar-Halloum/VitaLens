@@ -49,20 +49,7 @@ class BodyMetricController extends Controller
     {
         try {
             $user = $request->user();
-            $bodyMetrics = $user->bodyMetrics()
-                ->with(['healthVariable', 'unit'])
-                ->latest('created_at')
-                ->take(2)
-                ->get();
-            
-            $formatted = [];
-            foreach ($bodyMetrics as $metric) {
-                $formatted[$metric->healthVariable->key] = [
-                    'value' => (float) $metric->value,
-                    'unit' => $metric->unit->name,
-                    'updated_at' => $metric->created_at
-                ];
-            }
+            $formatted = $this->bodyMetricService->getUserMetrics($user);
             
             return $this->responseJSON($formatted, "Body metrics retrieved successfully");
             
