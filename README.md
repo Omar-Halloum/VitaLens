@@ -132,13 +132,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <!-- Deployment -->
 <img src="./readme/card-titles/title7.svg"/>
 
-### Add Title Here
-
-- Description here.
+### Postman Server Calls
 
 
-| Postman API 1                            | Postman API 2                       | Postman API 3                        |
+| Register                            | Login                       | Profile                        |
 | --------------------------------------- | ------------------------------------- | ------------------------------------- |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| ![Register](./readme/deployment/register.png) | ![Login](./readme/deployment/login.png) | ![Profile](./readme/deployment/profile.png) |
 
 <br><br>
