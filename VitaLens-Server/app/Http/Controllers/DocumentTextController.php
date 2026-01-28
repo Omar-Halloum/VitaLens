@@ -24,7 +24,7 @@ class DocumentTextController extends Controller
             
             return $this->responseJSON($documentText, "Document text added successfully", 201);
         } catch (\Exception $e) {
-            return $this->responseJSON($e->getMessage(), "failure", 500);
+            return $this->responseJSON(null, "Failed to add document text: " . $e->getMessage(), 500);
         }
     }
 
@@ -36,7 +36,7 @@ class DocumentTextController extends Controller
             
             return $this->responseJSON($documentText, "Document text retrieved successfully");
         } catch (\Exception $e) {
-            return $this->responseJSON($e->getMessage(), "failure", 500);
+            return $this->responseJSON(null, "Failed to retrieve document text: " . $e->getMessage(), 500);
         }
     }
 }

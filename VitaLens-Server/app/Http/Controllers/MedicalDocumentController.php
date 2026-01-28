@@ -25,7 +25,7 @@ class MedicalDocumentController extends Controller
             
             return $this->responseJSON($document, "Document uploaded successfully", 201);
         } catch (\Exception $e) {
-            return $this->responseJSON($e->getMessage(), "failure", 500);
+            return $this->responseJSON(null, "Failed to upload document: " . $e->getMessage(), 500);
         }
     }
 
@@ -37,7 +37,7 @@ class MedicalDocumentController extends Controller
             
             return $this->responseJSON($documents, "Documents retrieved successfully");
         } catch (\Exception $e) {
-            return $this->responseJSON($e->getMessage(), "failure", 500);
+            return $this->responseJSON(null, "Failed to retrieve documents: " . $e->getMessage(), 500);
         }
     }
 }

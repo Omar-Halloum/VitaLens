@@ -1,0 +1,281 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "unit": "minutes"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "google-drive-folder-id",
+          "mode": "id"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "id": "6a45afd6-56b4-426b-b9dd-375454f455bf",
+      "name": "Watch Patient Folder",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        2720,
+        3328
+      ],
+      "webhookId": "patient-upload",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zodhyRC1HoScN9J4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.mimeType }}",
+              "operation": "regex",
+              "value2": "(pdf|image)"
+            },
+            {
+              "value1": "={{ $json.name }}",
+              "operation": "notContains",
+              "value2": "_PROCESSED"
+            },
+            {
+              "value1": "={{ $json.name }}",
+              "operation": "notContains",
+              "value2": "VitaLens_Report"
+            }
+          ]
+        }
+      },
+      "id": "b0a24380-ee4b-4557-9d54-c9187b875a89",
+      "name": "Filter Medical Docs",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1,
+      "position": [
+        2944,
+        3328
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const file = $input.first().json;\nconst folderId = file.parents ? file.parents[0] : null;\n\nif (!folderId) throw new Error('No folder found');\n\nreturn [{ \n  json: {\n    ...file,\n    _patientFolderId: folderId,\n    _fileName: file.name\n  }\n}];"
+      },
+      "id": "f18d85cb-bf72-4cda-9be0-7a2ecdbefe9e",
+      "name": "Save File Context",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3168,
+        3328
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/api/clinic/analyze-document",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "document",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "patient_folder_id",
+              "value": "={{ $('Save File Context').item.json._patientFolderId }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "62d31a4b-090b-4141-bb3e-a457e3d84a89",
+      "name": "Get PDF from API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3600,
+        3328
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "nMVJIC2XEjALAsXk",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "=VitaLens_Report_{{ $now.toFormat('yyyyMMdd_HHmm') }}.pdf",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Save File Context').item.json._patientFolderId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "44925002-96ae-4de7-ad26-8d38c926ac1f",
+      "name": "Upload PDF to Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3824,
+        3328
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zodhyRC1HoScN9J4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Save File Context').item.json.id }}",
+          "mode": "id"
+        },
+        "newUpdatedFileName": "={{ $('Save File Context').item.json._fileName.replace(/\\.[^.]+$/, '') }}_PROCESSED{{ $('Save File Context').item.json._fileName.match(/\\.[^.]+$/)[0] }}",
+        "options": {}
+      },
+      "id": "072a8362-4a88-4d0a-9775-96a6cb273050",
+      "name": "Mark as PROCESSED1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4048,
+        3328
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zodhyRC1HoScN9J4",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "5cece930-47d3-44b7-8575-3d4abdf22b02",
+      "name": "Download Document",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3392,
+        3328
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "zodhyRC1HoScN9J4",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Watch Patient Folder": {
+      "main": [
+        [
+          {
+            "node": "Filter Medical Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Medical Docs": {
+      "main": [
+        [
+          {
+            "node": "Save File Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save File Context": {
+      "main": [
+        [
+          {
+            "node": "Download Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get PDF from API": {
+      "main": [
+        [
+          {
+            "node": "Upload PDF to Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload PDF to Drive": {
+      "main": [
+        [
+          {
+            "node": "Mark as PROCESSED1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Document": {
+      "main": [
+        [
+          {
+            "node": "Get PDF from API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dcb0e54f8e87083f87ecbe973b31940cf589a11dc7b03038f4b512a8e795a849"
+  }
+}

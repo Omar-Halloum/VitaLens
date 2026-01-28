@@ -47,4 +47,24 @@ class BodyMetricService
             $this->ragIngestionService->ingestUserRiskData($user);
         }
     }
+
+    public function getUserMetrics(User $user): array
+    {
+        $bodyMetrics = $user->bodyMetrics()
+            ->with(['healthVariable', 'unit'])
+            ->latest('created_at')
+            ->take(2)
+            ->get();
+        
+        $formatted = [];
+        foreach ($bodyMetrics as $metric) {
+            $formatted[$metric->healthVariable->key] = [
+                'value' => (float) $metric->value,
+                'unit' => $metric->unit->name,
+                'updated_at' => $metric->created_at
+            ];
+        }
+
+        return $formatted;
+    }
 }

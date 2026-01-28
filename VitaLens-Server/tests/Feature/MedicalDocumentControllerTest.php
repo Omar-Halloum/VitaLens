@@ -116,8 +116,8 @@ class MedicalDocumentControllerTest extends TestCase
 
         $response->assertStatus(500)
             ->assertJson([
-                'status' => 'failure',
-                'payload' => 'OCR service unavailable'
+                'status' => 'Failed to upload document: OCR service unavailable',
+                'payload' => null
             ]);
     }
 
@@ -155,8 +155,8 @@ class MedicalDocumentControllerTest extends TestCase
 
         $response->assertStatus(500)
             ->assertJson([
-                'status' => 'failure',
-                'payload' => 'Service unavailable'
+                'status' => 'Failed to retrieve documents: Service unavailable',
+                'payload' => null
             ]);
     }
 }

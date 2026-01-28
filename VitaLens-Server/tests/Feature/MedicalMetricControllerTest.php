@@ -104,8 +104,8 @@ class MedicalMetricControllerTest extends TestCase
 
         $response->assertStatus(500)
             ->assertJson([
-                'status' => 'failure',
-                'payload' => 'Extraction Failed'
+                'status' => 'Failed to extract metrics: Extraction Failed',
+                'payload' => null
             ]);
     }
     
@@ -174,8 +174,8 @@ class MedicalMetricControllerTest extends TestCase
 
         $response->assertStatus(500)
              ->assertJson([
-                 'status' => 'failure',
-                 'payload' => 'DB Error'
+                 'status' => 'Failed to retrieve metrics: DB Error',
+                 'payload' => null
              ]);
     }
 
@@ -223,8 +223,8 @@ class MedicalMetricControllerTest extends TestCase
 
         $response->assertStatus(500)
              ->assertJson([
-                 'status' => 'failure',
-                 'payload' => 'Err'
+                 'status' => 'Failed to retrieve document metrics: Err',
+                 'payload' => null
              ]);
     }
 }

@@ -35,6 +35,11 @@ class ClinicService
             ->get();
     }
 
+    public function getClinicByFolderId(string $folderId): Clinic
+    {
+        return Clinic::where('drive_folder_id', $folderId)->firstOrFail();
+    }
+
     public function analyzeDocument(string $patientFolderId, UploadedFile $file)
     {
         $user = User::where('drive_folder_id', $patientFolderId)->first();
