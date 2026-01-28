@@ -49,7 +49,7 @@ class MedicalMetricController extends Controller
             return $this->responseJSON($result, "Metrics extracted and predictions updated successfully");
             
         } catch (\Exception $e) {
-            return $this->responseJSON($e->getMessage(), "failure", 500);
+            return $this->responseJSON(null, "Failed to extract metrics: " . $e->getMessage(), 500);
         }
     }
 
@@ -62,7 +62,7 @@ class MedicalMetricController extends Controller
             return $this->responseJSON($metrics, "Metrics retrieved successfully");
             
         } catch (\Exception $e) {
-            return $this->responseJSON($e->getMessage(), "failure", 500);
+            return $this->responseJSON(null, "Failed to retrieve metrics: " . $e->getMessage(), 500);
         }
     }
 
@@ -74,7 +74,7 @@ class MedicalMetricController extends Controller
             return $this->responseJSON($metrics, "Document metrics retrieved successfully");
             
         } catch (\Exception $e) {
-            return $this->responseJSON($e->getMessage(), "failure", 500);
+            return $this->responseJSON(null, "Failed to retrieve document metrics: " . $e->getMessage(), 500);
         }
     }
 }

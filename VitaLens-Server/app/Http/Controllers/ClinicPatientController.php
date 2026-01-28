@@ -10,6 +10,8 @@ use App\Services\MedicalDocumentService;
 use App\Services\ClinicService;
 use App\Http\Requests\StoreClinicPatientsRequest;
 use App\Http\Requests\AnalyzeDocumentRequest;
+use App\Http\Requests\MatchFolderRequest;
+use App\Http\Requests\UploadReportRequest;
 
 class ClinicPatientController extends Controller
 {
@@ -48,12 +50,12 @@ class ClinicPatientController extends Controller
         }
     }
 
-    public function matchFolder(Request $request)
+    public function matchFolder(MatchFolderRequest $request)
     {
         try {
-            $request->validate(['folder_id' => ['required', 'string']]);
-
-            $user = $this->userService->getUserByFolderId($request->folder_id);
+            $validated = $request->validated();
+            
+            $user = $this->userService->getUserByFolderId($validated['folder_id']);
 
             return $this->responseJSON([
                 'user_id' => $user->id,
@@ -66,14 +68,9 @@ class ClinicPatientController extends Controller
         }
     }
 
-    public function uploadReport(Request $request)
+    public function uploadReport(UploadReportRequest $request)
     {
-        try {
-            $request->validate([
-                'user_id' => ['required', 'exists:users,id'],
-                'document' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png']
-            ]);
-
+        try {            
             $targetPatient = User::findOrFail($request->user_id);
 
             $document = $this->medicalDocumentService->addDocument($targetPatient, $request->file('document'));
