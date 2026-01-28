@@ -31,7 +31,7 @@ class AIService
             ->post("{$this->baseUrl}/chat/completions", [
                 'model' => $this->model,
                 'messages' => $messages,
-                'temperature' => 0,
+                'temperature' => 0.2,
                 'response_format' => ['type' => 'json_object'],
             ]);
 
