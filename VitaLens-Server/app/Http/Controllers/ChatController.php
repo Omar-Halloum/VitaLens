@@ -19,21 +19,9 @@ class ChatController extends Controller
     public function getChat(): JsonResponse
     {
         $user = Auth::user();
-        $chat = $this->chatService->getUserChat($user);
+        $chatData = $this->chatService->getUserChat($user);
 
-        return response()->json([
-            'chat' => [
-                'id' => $chat->id,
-                'messages' => $chat->messages->map(function ($msg) {
-                    return [
-                        'id' => $msg->id,
-                        'role' => $msg->role,
-                        'content' => $msg->content,
-                        'created_at' => $msg->created_at->toISOString(),
-                    ];
-                }),
-            ],
-        ]);
+        return $this->responseJSON($chatData, "Chat retrieved successfully");
     }
     
     public function sendMessage(SendMessageRequest $request): JsonResponse
@@ -41,6 +29,6 @@ class ChatController extends Controller
         $user = Auth::user();
         $result = $this->chatService->sendMessage($user, $request->message);
 
-        return response()->json($result);
+        return $this->responseJSON($result, "Message sent successfully");
     }
 }

@@ -19,7 +19,7 @@ class ChatService
         $this->ragUrl = config('services.vitalens_intelligence.base_url');
     }
 
-    public function getUserChat(User $user)
+    public function findOrCreateChat(User $user): Chat
     {
         $chat = $user->chat()->with('messages')->first();
         
@@ -32,9 +32,26 @@ class ChatService
         return $chat;
     }
 
+    public function getUserChat(User $user): array
+    {
+        $chat = $this->findOrCreateChat($user);
+
+        return [
+            'chat' => [
+                'id' => $chat->id,
+                'messages' => $chat->messages->map(fn($msg) => [
+                    'id' => $msg->id,
+                    'role' => $msg->role,
+                    'content' => $msg->content,
+                    'created_at' => $msg->created_at->toISOString(),
+                ]),
+            ],
+        ];
+    }
+
     public function sendMessage(User $user, string $message): array
     {
-        $chat = $this->getUserChat($user);
+        $chat = $this->findOrCreateChat($user);
 
         $userMessageRecord = new ChatMessage;
         $userMessageRecord->chat_id = $chat->id;
