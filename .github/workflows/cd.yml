@@ -56,6 +56,8 @@ jobs:
             
             docker compose exec -T backend php artisan migrate --force
             
+            docker compose exec -T backend php artisan db:seed --force
+            
             docker compose exec -T backend php artisan config:cache
             docker compose exec -T backend php artisan route:cache
             docker compose exec -T backend php artisan view:cache
