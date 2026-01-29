@@ -37,15 +37,13 @@ class ChatService
         $chat = $this->findOrCreateChat($user);
 
         return [
-            'chat' => [
-                'id' => $chat->id,
-                'messages' => $chat->messages->map(fn($msg) => [
-                    'id' => $msg->id,
-                    'role' => $msg->role,
-                    'content' => $msg->content,
-                    'created_at' => $msg->created_at->toISOString(),
-                ]),
-            ],
+            'id' => $chat->id,
+            'messages' => $chat->messages->map(fn($msg) => [
+                'id' => $msg->id,
+                'role' => $msg->role,
+                'content' => $msg->content,
+                'created_at' => $msg->created_at->toISOString(),
+            ]),
         ];
     }
 
