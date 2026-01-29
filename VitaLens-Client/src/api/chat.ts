@@ -10,24 +10,27 @@ export async function fetchChat(): Promise<Chat> {
   const json = await res.json();
   
   if (!res.ok) {
-    throw new Error(json.payload || "Failed to fetch chat");
+    throw new Error(json.status || "Failed to fetch chat");
   }
   
-  return json.chat as Chat;
+  return json.payload as Chat;
 }
 
 export async function sendMessage(request: SendMessageRequest): Promise<SendMessageResponse> {
   const res = await fetch(`${API_BASE_URL}/v1/chat/messages`, {
     method: 'POST',
-    headers: getAuthHeader(),
+    headers: {
+      ...getAuthHeader(),
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(request),
   });
   
   const json = await res.json();
   
   if (!res.ok) {
-    throw new Error(json.message || "Failed to send message");
+    throw new Error(json.status || "Failed to send message");
   }
   
-  return json as SendMessageResponse;
+  return json.payload as SendMessageResponse;
 }
