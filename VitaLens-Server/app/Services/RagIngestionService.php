@@ -109,25 +109,42 @@ class RagIngestionService
     public function ingestUserRiskData(User $user): bool
     {
         try {
-            $risks = $user->riskPredictions()->latest()->take(3)->get();
+            // Get all recent predictions
+            $allPredictions = $user->riskPredictions()
+                ->with('riskType')
+                ->latest('created_at')
+                ->get();
             
-            if ($risks->isEmpty()) {
+            if ($allPredictions->isEmpty()) {
                 return true;
             }
 
-            $text = "Recent Risk Predictions:\n";
-            foreach ($risks as $risk) {
+            // Get only the most recent prediction for each risk type
+            $latestRisks = $allPredictions->unique('risk_type_id')->values();
+            
+            $predictionDate = $latestRisks->first()->created_at;
+            $dateFormatted = $predictionDate->format('Y-m-d');
+            
+            $text = "Risk Predictions as of {$dateFormatted}:\n\n";
+            
+            foreach ($latestRisks as $risk) {
                 $percentage = round($risk->probability * 100, 1);
                 $text .= "{$risk->riskType->display_name}: {$percentage}% risk\n";
+                
+                // Include the AI insight if it exists
+                if ($risk->ai_insight) {
+                    $text .= "Analysis: {$risk->ai_insight}\n";
+                }
+                $text .= "\n";
             }
 
             /** @var \Illuminate\Http\Client\Response $response */
             $response = Http::timeout(30)->post("{$this->baseUrl}/rag/ingest", [
                 'user_id' => $user->id,
                 'source_type' => 'risk_predictions',
-                'source_id' => $user->id,
+                'source_id' => $user->id . '_' . $predictionDate->format('Ymd'),
                 'text' => $text,
-                'date' => now()->format('Y-m-d'),
+                'date' => $dateFormatted,
             ]);
 
             return $response->successful();
