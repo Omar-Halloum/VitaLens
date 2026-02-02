@@ -35,6 +35,18 @@ class RagService:
         if not chunks:
             return {"success": False, "message": "No chunks created"}
         
+        # Delete existing chunks for this source to ensure clean updates
+        try:
+            self.collection.delete(
+                where={
+                    "source_type": source_type,
+                    "source_id": str(source_id),
+                    "user_id": str(user_id)
+                }
+            )
+        except Exception as e:
+            pass
+        
         embeddings = self.embedding_model.encode(chunks).tolist()
         
         # Prepare metadata and ensure user_id is in metadata so we can filter by it later

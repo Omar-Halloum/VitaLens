@@ -4,7 +4,7 @@ namespace App\Prompts;
 
 class ChatPrompts
 {
-    public static function chatPrompt(string $userMessage, array $ragContext): array
+    public static function chatPrompt(string $userMessage, array $ragContext, array $chatHistory = []): array
     {
         $contextText = "";
         if (!empty($ragContext)) {
@@ -31,9 +31,17 @@ class ChatPrompts
 
         $userPrompt = "{$contextText}USER QUESTION:\n{$userMessage}\n\nRESPOND WITH THIS EXACT JSON FORMAT:\n{\n    \"response\": \"Your answer based on the context above\"\n}";
 
-        return [
-            ['role' => 'system', 'content' => $systemPrompt],
-            ['role' => 'user', 'content' => $userPrompt],
+        $messages = [
+            ['role' => 'system', 'content' => $systemPrompt]
         ];
+        
+        // Inject chat history to give the AI conversational memory
+        foreach ($chatHistory as $historyMsg) {
+            $messages[] = $historyMsg;
+        }
+        
+        $messages[] = ['role' => 'user', 'content' => $userPrompt];
+
+        return $messages;
     }
 }

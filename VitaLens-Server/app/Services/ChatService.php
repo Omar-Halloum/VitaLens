@@ -60,7 +60,7 @@ class ChatService
         try {
             $context = $this->queryRag($user->id, $message);
 
-            $aiResponse = $this->generateResponse($message, $context);
+            $aiResponse = $this->generateResponse($chat, $message, $context);
 
             $aiMessage = new ChatMessage;
             $aiMessage->chat_id = $chat->id;
@@ -110,9 +110,21 @@ class ChatService
         }
     }
 
-    protected function generateResponse(string $userMessage, array $context): string
+    protected function generateResponse(Chat $chat, string $userMessage, array $context): string
     {
-        $prompt = ChatPrompts::chatPrompt($userMessage, $context);
+        $chatHistory = $chat->messages()
+            ->orderBy('created_at', 'desc')
+            ->take(11)
+            ->get()
+            ->reverse()
+            ->take(10)
+            ->map(fn($msg) => [
+                'role' => $msg->role,
+                'content' => $msg->content
+            ])
+            ->toArray();
+        
+        $prompt = ChatPrompts::chatPrompt($userMessage, $context, $chatHistory);
         
         $aiResponse = $this->aiService->aiCall($prompt);
         $decoded = json_decode($aiResponse, true);
